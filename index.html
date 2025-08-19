@@ -2,17 +2,8 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    
-    <!-- MODIFIÉ : Ajout de 'user-scalable=no' pour une expérience plus native -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    
-    <!-- AJOUTS : Balises pour le mode application web en plein écran sur iOS -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="PIONPION">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PIONPION - Projet: ASCENSION v2.0</title>
-    
     <style>
         :root {
             --bg-color: #10101a; --container-bg: rgba(20, 20, 30, 0.8); --cell-bg: rgba(10, 10, 20, 0.6);
@@ -224,7 +215,6 @@
         const docElem = document.documentElement;
 
         function openFullscreen() {
-            // Cette fonction ne fonctionnera pas sur iPhone, mais reste utile pour les autres plateformes (Android, Desktop)
             if (docElem.requestFullscreen) { docElem.requestFullscreen(); } 
             else if (docElem.webkitRequestFullscreen) { /* Safari */ docElem.webkitRequestFullscreen(); }
         }
@@ -246,23 +236,25 @@
         
         // --- GAME STATE ---
         let gameMode, currentChallengeId, currency, campaignProgress, board, moveHistory, fullMoveHistory, playerMoveCount, firstPlayerMoveIndex, currentPlayer, gameActive;
-        const ALL_CHALLENGES = [ {id:1,phase:1,title:"Initiation",objective:"Gagnez contre l'IA Facile.",difficulty:'easy',medals:{bronze:{check:w=>w.winner==='X',desc:"Gagner la partie."},silver:{check:(w,p)=>p.X<=4,desc:"Gagner en 4 coups ou moins."},gold:{check:(w,p)=>p.X<=3,desc:"Gagner en 3 coups."}},rewards:{bronze:10,silver:5,gold:10}},{id:2,phase:1,title:"Ligne de Force",objective:"Gagnez avec une ligne verticale.",difficulty:'easy',medals:{bronze:{check:w=>[[0,3,6],[1,4,7],[2,5,8]].some(l=>l.every(i=>w.line.includes(i))),desc:"Gagner avec une colonne."},silver:{check:(w,p,c)=>c.bronze&&p.X<=4,desc:"Et en 4 coups ou moins."},gold:{check:(w,p,c)=>c.silver&&!moveHistory.includes(firstPlayerMoveIndex),desc:"Et sans que votre 1er pion soit retiré."}},rewards:{bronze:15,silver:10,gold:15}},{id:3,phase:1,title:"Maître du Centre",objective:"Gagnez en utilisant la case centrale.",difficulty:'intermediate',medals:{bronze:{check:w=>w.line.includes(4),desc:"Gagner avec la case centrale."},silver:{check:(w,p,c)=>c.bronze&&!fullMoveHistory.some(m=>m.index===4&&m.player==='O'),desc:"Et sans que l'IA ne joue au centre."},gold:{check:(w,p,c)=>c.silver&&levelSelect.value==='intermediate',desc:"Et en difficulté Intermédiaire."}},rewards:{bronze:15,silver:15,gold:20}},{id:4,phase:2,title:"Intouchable",objective:"Gagnez sans que votre 1er pion soit retiré.",difficulty:'intermediate',medals:{bronze:{check:w=>moveHistory.includes(firstPlayerMoveIndex),desc:"Votre 1er pion est toujours sur le plateau."},silver:{check:(w,p,c)=>c.bronze&&p.X<=4,desc:"Et gagner en 4 coups ou moins."},gold:{check:(w,p,c)=>c.silver&&levelSelect.value==='intermediate',desc:"Et en difficulté Intermédiaire."}},rewards:{bronze:20,silver:15,gold:25}},{id:5,phase:2,title:"Efficacité Redoutable",objective:"Gagnez en 3 coups exactement.",difficulty:'intermediate',medals:{bronze:{check:(w,p)=>p.X===3,desc:"Gagner en 3 coups."},silver:{check:(w,p,c)=>c.bronze&&w.line.includes(4),desc:"Et en utilisant la case centrale."},gold:{check:(w,p,c)=>c.silver&&levelSelect.value==='hard',desc:"Et en difficulté Difficile."}},rewards:{bronze:25,silver:25,gold:50}},{id:6,phase:2,title:"Le Puzzle du Coin",objective:"L'IA a mal joué. Gagnez au prochain coup.",difficulty:'easy',preset:{board:['O',null,null,null,'X',null,null,null,'O'],turn:'X'},medals:{bronze:{check:(w,p)=>p.X===1,desc:"Gagner en un seul coup."},silver:{check:(w,p,c)=>c.bronze,desc:" "},gold:{check:(w,p,c)=>c.bronze,desc:" "}},rewards:{bronze:30,silver:0,gold:0}},{id:7,phase:3,title:"Le Grand Test",objective:"Gagnez contre l'IA en Difficile.",difficulty:'hard',medals:{bronze:{check:w=>levelSelect.value==='hard',desc:"Gagner contre l'IA Difficile."},silver:{check:(w,p,c)=>c.bronze&&p.X<=5,desc:"Et en 5 coups ou moins."},gold:{check:(w,p,c)=>c.silver&&moveHistory.includes(firstPlayerMoveIndex),desc:"Et sans que votre 1er pion soit retiré."}},rewards:{bronze:50,silver:50,gold:100}}];
+        const ALL_CHALLENGES = [ /* ... Votre tableau de défis est long, je l'ai masqué ici pour la lisibilité, mais il est bien dans le code ... */ {id:1,phase:1,title:"Initiation",objective:"Gagnez contre l'IA Facile.",difficulty:'easy',medals:{bronze:{check:w=>w.winner==='X',desc:"Gagner la partie."},silver:{check:(w,p)=>p.X<=4,desc:"Gagner en 4 coups ou moins."},gold:{check:(w,p)=>p.X<=3,desc:"Gagner en 3 coups."}},rewards:{bronze:10,silver:5,gold:10}},{id:2,phase:1,title:"Ligne de Force",objective:"Gagnez avec une ligne verticale.",difficulty:'easy',medals:{bronze:{check:w=>[[0,3,6],[1,4,7],[2,5,8]].some(l=>l.every(i=>w.line.includes(i))),desc:"Gagner avec une colonne."},silver:{check:(w,p,c)=>c.bronze&&p.X<=4,desc:"Et en 4 coups ou moins."},gold:{check:(w,p,c)=>c.silver&&!moveHistory.includes(firstPlayerMoveIndex),desc:"Et sans que votre 1er pion soit retiré."}},rewards:{bronze:15,silver:10,gold:15}},{id:3,phase:1,title:"Maître du Centre",objective:"Gagnez en utilisant la case centrale.",difficulty:'intermediate',medals:{bronze:{check:w=>w.line.includes(4),desc:"Gagner avec la case centrale."},silver:{check:(w,p,c)=>c.bronze&&!fullMoveHistory.some(m=>m.index===4&&m.player==='O'),desc:"Et sans que l'IA ne joue au centre."},gold:{check:(w,p,c)=>c.silver&&levelSelect.value==='intermediate',desc:"Et en difficulté Intermédiaire."}},rewards:{bronze:15,silver:15,gold:20}},{id:4,phase:2,title:"Intouchable",objective:"Gagnez sans que votre 1er pion soit retiré.",difficulty:'intermediate',medals:{bronze:{check:w=>moveHistory.includes(firstPlayerMoveIndex),desc:"Votre 1er pion est toujours sur le plateau."},silver:{check:(w,p,c)=>c.bronze&&p.X<=4,desc:"Et gagner en 4 coups ou moins."},gold:{check:(w,p,c)=>c.silver&&levelSelect.value==='intermediate',desc:"Et en difficulté Intermédiaire."}},rewards:{bronze:20,silver:15,gold:25}},{id:5,phase:2,title:"Efficacité Redoutable",objective:"Gagnez en 3 coups exactement.",difficulty:'intermediate',medals:{bronze:{check:(w,p)=>p.X===3,desc:"Gagner en 3 coups."},silver:{check:(w,p,c)=>c.bronze&&w.line.includes(4),desc:"Et en utilisant la case centrale."},gold:{check:(w,p,c)=>c.silver&&levelSelect.value==='hard',desc:"Et en difficulté Difficile."}},rewards:{bronze:25,silver:25,gold:50}},{id:6,phase:2,title:"Le Puzzle du Coin",objective:"L'IA a mal joué. Gagnez au prochain coup.",difficulty:'easy',preset:{board:['O',null,null,null,'X',null,null,null,'O'],turn:'X'},medals:{bronze:{check:(w,p)=>p.X===1,desc:"Gagner en un seul coup."},silver:{check:(w,p,c)=>c.bronze,desc:" "},gold:{check:(w,p,c)=>c.bronze,desc:" "}},rewards:{bronze:30,silver:0,gold:0}},{id:7,phase:3,title:"Le Grand Test",objective:"Gagnez contre l'IA en Difficile.",difficulty:'hard',medals:{bronze:{check:w=>levelSelect.value==='hard',desc:"Gagner contre l'IA Difficile."},silver:{check:(w,p,c)=>c.bronze&&p.X<=5,desc:"Et en 5 coups ou moins."},gold:{check:(w,p,c)=>c.silver&&moveHistory.includes(firstPlayerMoveIndex),desc:"Et sans que votre 1er pion soit retiré."}},rewards:{bronze:50,silver:50,gold:100}}];
 
         // --- INITIALIZATION ---
         function init() {
             loadData();
             createBoardCells();
             
+            // --- MODIFICATION : Écouteurs d'événements ---
+            // Le clic de lancement gère le plein écran et l'audio
             launchBtn.addEventListener('click', () => {
                 openFullscreen();
                 audioManager.init();
                 launchScreen.classList.add('hidden');
-                showScreen('mainMenu', true);
+                showScreen('mainMenu', true); // Affiche le menu principal pour la première fois
             });
 
             exitFullscreenBtn.addEventListener('click', closeFullscreen);
             document.addEventListener('fullscreenchange', checkFullscreenStatus);
-            document.addEventListener('webkitfullscreenchange', checkFullscreenStatus);
+            document.addEventListener('webkitfullscreenchange', checkFullscreenStatus); // Pour Safari
 
             boardElement.addEventListener('click', handleBoardClick);
             document.querySelectorAll('button').forEach(b => b.addEventListener('click', () => audioManager.play('click')));
@@ -273,12 +265,17 @@
             document.querySelector('.back-to-campaign').addEventListener('click', ()=>{closeModal(victoryModal); showCampaignScreen();});
             document.getElementById('next-challenge-btn').addEventListener('click', ()=>{closeModal(victoryModal); startChallenge(currentChallengeId+1);});
             resetBtn.addEventListener('click', () => gameMode === 'campaign' ? startChallenge(currentChallengeId) : startQuickPlay());
+            
+            // MODIFICATION : Plus besoin d'afficher un écran au départ, le HTML s'en charge.
         }
 
         // --- SCREEN & MODAL MANAGEMENT ---
         function showScreen(screenName, isInitial = false) {
+            // ... (votre code showScreen existant, inchangé)
             if (!isInitial) { screens[currentScreen].classList.add('hidden'); } setTimeout(() => { Object.values(screens).forEach(s => s.style.display = 'none'); const newScreen = screens[screenName]; newScreen.style.display = 'grid'; setTimeout(() => newScreen.classList.remove('hidden'), 50); currentScreen = screenName; currencyDisplay.classList.toggle('hidden', screenName !== 'campaign'); }, isInitial ? 0 : 400);
         }
+
+        // Le reste de votre code JavaScript (modals, UI, data, game logic, etc.) reste identique
         function openModal(modal) { modal.style.display = 'flex'; }
         function closeModal(modal) { modal.style.display = 'none'; }
         function showCampaignScreen() { const list = document.getElementById('campaign-list'); list.innerHTML = ''; let lastPhase = 0; ALL_CHALLENGES.forEach(challenge => { if (challenge.phase > lastPhase) { const header = document.createElement('div'); header.className = 'phase-header'; header.textContent = `PHASE ${challenge.phase}`; list.appendChild(header); lastPhase = challenge.phase; } let progress = campaignProgress.find(p => p.id === challenge.id); if (!progress) { progress = { id: challenge.id, unlocked: challenge.id === 1, medal: 0 }; campaignProgress.push(progress); } progress.unlocked = progress.id === 1 || (campaignProgress.find(p => p.id === challenge.id - 1)?.medal > 0); const item = document.createElement('div'); item.className = 'challenge-item'; if (!progress.unlocked) item.classList.add('locked'); item.innerHTML = ` <div class="challenge-header"> <div class="challenge-id">${challenge.id}</div> <div class="challenge-info"> <div>${challenge.title}</div> <small>${challenge.objective}</small> </div> <div class="challenge-medals-display">${getMedalHTML(progress.medal)}</div> </div> <div class="medal-objectives"> <div>🥉 ${challenge.medals.bronze.desc}</div> <div>🥈 ${challenge.medals.silver.desc}</div> <div>🥇 ${challenge.medals.gold.desc}</div> </div> `; if (progress.unlocked) item.addEventListener('click', () => startChallenge(challenge.id)); list.appendChild(item); }); showScreen('campaign'); }
