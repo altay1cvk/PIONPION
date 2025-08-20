@@ -16,19 +16,20 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#e0e5ec">
 
-    <title>PIONPION - Projet: ASCENSION v3.0 (Refonte)</title>
+    <title>PIONPION - Projet: ASCENSION v4.0 (Refonte iOS)</title>
     
     <style>
         /* =================================================================== */
-        /* NOUVELLE DIRECTION ARTISTIQUE : "NEUMORPHISME DOUX" & TACTILE     */
-        /* CSS 100% repensé pour la fluidité et la compatibilité iOS / Safari */
+        /* DIRECTION ARTISTIQUE V4.0 : "FLUID UI" & PERFORMANCES iOS         */
+        /* CSS 100% repensé pour la fluidité, la disposition et l'ergonomie. */
+        /* Couleurs originales conservées.                                  */
         /* =================================================================== */
         :root {
-            /* Palette de couleurs "Neumorphisme Doux" */
+            /* Palette de couleurs "Neumorphisme Doux" (INCHANGÉE) */
             --bg-color: #e0e5ec;
-            --accent-color: #007aff; /* Bleu natif iOS */
-            --x-color: #ff3b30;     /* Rouge natif iOS */
-            --o-color: #34c759;     /* Vert natif iOS */
+            --accent-color: #007aff; 
+            --x-color: #ff3b30;     
+            --o-color: #34c759;     
             --text-color: #5a6473;
             --text-light-color: #9ba6b8;
             --shadow-light: #ffffff;
@@ -36,10 +37,10 @@
             --bronze: #cd7f32; --silver: #c0c0c0; --gold: #ffd700;
             
             /* Zones de sécurité de l'iPhone (encoche, barre d'accueil) */
-            --safe-area-inset-top: env(safe-area-inset-top, 0px);
-            --safe-area-inset-right: env(safe-area-inset-right, 0px);
-            --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
-            --safe-area-inset-left: env(safe-area-inset-left, 0px);
+            --safe-area-inset-top: env(safe-area-inset-top, 20px);
+            --safe-area-inset-right: env(safe-area-inset-right, 20px);
+            --safe-area-inset-bottom: env(safe-area-inset-bottom, 20px);
+            --safe-area-inset-left: env(safe-area-inset-left, 20px);
         }
 
         /* Importation de la police "Inter", parfaite pour les UI modernes */
@@ -50,73 +51,88 @@
             box-sizing: border-box; 
             -webkit-user-select: none; user-select: none;
             -webkit-tap-highlight-color: transparent;
+            font-family: 'Inter', sans-serif; 
         }
         html {
             -webkit-text-size-adjust: 100%;
         }
 
-        /* NOUVEAU BODY : Layout principal clair et aéré */
+        /* NOUVEAU BODY : Layout vertical, optimisé pour les téléphones */
         body { 
-            font-family: 'Inter', sans-serif; 
             background-color: var(--bg-color);
             color: var(--text-color); 
-            height: 100dvh; /* Hauteur dynamique du viewport, idéal pour Safari mobile */
+            height: 100dvh; /* Hauteur dynamique du viewport */
             margin: 0; 
-            overflow: hidden;
+            overflow: hidden; /* Empêche le scroll global */
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 1rem;
+            padding: var(--safe-area-inset-top) var(--safe-area-inset-right) var(--safe-area-inset-bottom) var(--safe-area-inset-left);
         }
         
-        /* NOUVEL ÉCRAN DE LANCEMENT : Minimaliste et direct */
-        #launch-screen {
-            display: flex; flex-direction: column; justify-content: center;
-            align-items: center; width: 100%; height: 100%; gap: 25px;
-            transition: opacity 0.5s ease, transform 0.5s ease;
+        /* NOUVEAUX ÉCRANS & TRANSITIONS FLUIDES (SLIDE + FADE) */
+        .screen {
+            flex-grow: 1; /* Prend l'espace disponible */
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+            will-change: opacity, transform;
+            overflow: hidden; /* Cache le contenu qui dépasse */
         }
-        #launch-screen.hidden {
-            opacity: 0; transform: scale(1.05); pointer-events: none;
+        .screen.hidden {
+            opacity: 0;
+            transform: translateY(15px);
+            pointer-events: none;
+            position: absolute; /* Permet la superposition pendant la transition */
+            top: 0; left: 0;
+            padding: var(--safe-area-inset-top) var(--safe-area-inset-right) var(--safe-area-inset-bottom) var(--safe-area-inset-left);
+        }
+
+        /* NOUVEL ÉCRAN DE LANCEMENT : Centré et épuré */
+        #launch-screen {
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            text-align: center;
         }
         #launch-screen .logo {
             font-weight: 800;
-            font-size: clamp(4em, 20vmin, 8em);
+            font-size: clamp(4rem, 20vmin, 8rem);
             color: var(--text-light-color);
             text-shadow: 2px 2px 5px var(--shadow-dark), -2px -2px 5px var(--shadow-light);
         }
         
-        /* NOUVEAUX BOUTONS : L'effet "pressé" tactile (Neumorphisme) */
+        /* NOUVEAUX BOUTONS : Forme "Squircle" (iOS), animations légères */
         button { 
-            font-family: 'Inter', sans-serif; font-weight: 600; cursor: pointer; 
+            font-weight: 600; cursor: pointer; 
             border: none;
             background-color: var(--bg-color); 
             color: var(--text-color); 
-            border-radius: 20px; 
-            transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
-            padding: 20px 40px; font-size: 1.2em; margin: 10px 0;
-            box-shadow: 8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light);
-            will-change: transform, box-shadow;
+            border-radius: 12px; /* Style iOS */
+            transition: transform 0.15s ease-out;
+            padding: 16px 24px; font-size: 1.1em; margin: 8px 0;
+            box-shadow: 5px 5px 10px var(--shadow-dark), -5px -5px 10px var(--shadow-light);
+            will-change: transform;
         }
         button:hover, button:focus-visible {
-            transform: translateY(-2px);
+            transform: scale(1.03); /* Effet de survol subtil */
             color: var(--accent-color);
         }
         button:active {
-            transform: translateY(1px);
-            box-shadow: inset 6px 6px 12px var(--shadow-dark), inset -6px -6px 12px var(--shadow-light);
-            transition-duration: 0.1s;
+            transform: scale(0.97); /* Effet de pression, très réactif */
+            box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
+            transition-duration: 0.05s;
         }
         button.disabled {
             opacity: 0.6; cursor: not-allowed;
             transform: none !important; color: var(--text-light-color) !important;
-            box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light) !important;
+            box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light) !important;
         }
-        button.text-button { /* Pour les boutons moins proéminents */
-            box-shadow: none; background: transparent; color: var(--text-light-color); font-size: 1em;
+        button.text-button { /* Pour les boutons secondaires (retour, etc.) */
+            box-shadow: none; background: transparent; color: var(--text-light-color); font-size: 1em; padding: 10px;
         }
-        button.text-button:hover { color: var(--accent-color); }
-        button.text-button:active { background: rgba(0,0,0,0.05); transform: none; box-shadow: none; }
+        button.text-button:hover { color: var(--accent-color); transform: none; }
+        button.text-button:active { background: rgba(0,0,0,0.05); transform: scale(0.98); box-shadow: none; }
 
         /* NOUVELLE UI FIXE : Intégrée et discrète */
         .fixed-ui-element {
@@ -124,145 +140,130 @@
             background: var(--bg-color);
             box-shadow: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light);
             z-index: 100;
-            transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1.2);
+            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1.2);
         }
-        .fixed-ui-element.hidden { transform: translateY(-200%); }
+        .fixed-ui-element.hidden { transform: translateY(-150%); }
 
         #exit-fullscreen-btn {
-            top: max(15px, var(--safe-area-inset-top));
-            left: max(15px, var(--safe-area-inset-left));
-            width: 45px; height: 45px; border-radius: 50%;
+            top: var(--safe-area-inset-top); left: var(--safe-area-inset-left);
+            width: 40px; height: 40px; border-radius: 50%;
             display: grid; place-items: center;
-            font-size: 2.2em; line-height: 1; font-weight: 300;
-        }
-        #exit-fullscreen-btn:active {
-             box-shadow: inset 2px 2px 4px var(--shadow-dark), inset -2px -2px 4px var(--shadow-light);
+            font-size: 2em; line-height: 1; font-weight: 300;
         }
         
         .currency-display { 
-            top: max(15px, var(--safe-area-inset-top));
-            right: max(15px, var(--safe-area-inset-right));
-            padding: 10px 20px; border-radius: 20px; 
-            font-size: 1.2em; font-weight: 600;
+            top: var(--safe-area-inset-top); right: var(--safe-area-inset-right);
+            padding: 8px 18px; border-radius: 20px; 
+            font-size: 1.1em; font-weight: 600;
         }
         .currency-display.reward-pulse { animation: pulse 0.5s; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
         
-        /* NOUVEAUX ÉCRANS & TRANSITIONS FLUIDES */
-        .screen { 
-            width: 100%; max-width: 500px;
-            padding: clamp(1.5rem, 5vw, 2.5rem); text-align: center;
-            transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-            will-change: opacity, transform;
-            max-height: calc(100dvh - 2rem); overflow-y: auto;
-        }
-        .screen.hidden {
-            opacity: 0; transform: scale(0.95);
-            pointer-events: none; position: absolute;
-        }
+        /* STRUCTURE DES ÉCRANS */
+        .screen-header { padding: 0 10px; text-align: center; }
+        .screen-content { flex-grow: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 15px 10px; }
+        .screen-footer { padding: 10px; text-align: center; }
         
-        h1, h2 { font-weight: 800; letter-spacing: 2px; margin: 0 0 25px 0; color: var(--text-light-color); }
-        h1 { font-size: clamp(3em, 12vmin, 5em); } 
-        h2 { font-size: clamp(2em, 8vmin, 3em); }
+        h1, h2 { font-weight: 800; letter-spacing: 1px; margin: 0 0 1rem 0; color: var(--text-light-color); text-transform: uppercase; }
+        h1 { font-size: clamp(2.5rem, 10vmin, 4rem); } 
+        h2 { font-size: clamp(1.8rem, 8vmin, 2.5rem); }
         
-        #main-menu .logo { font-size: 5em; margin-bottom: 20px; }
-        #main-menu button { display: block; width: 90%; max-width: 350px; margin: 20px auto; }
+        #main-menu { align-items: center; justify-content: center; text-align: center; gap: 1rem; }
+        #main-menu .logo { font-size: 4rem; margin-bottom: 1rem; }
+        #main-menu button { display: block; width: 100%; max-width: 320px; }
         
-        /* NOUVEAU STYLE POUR LA LISTE DES DÉFIS */
-        #campaign-list {
-            max-height: 55vh; overflow-y: auto;
-            -webkit-overflow-scrolling: touch; /* Défilement inertiel sur iOS */
-        }
-        .phase-header { font-weight: 800; font-size: 1.1em; text-transform: uppercase; letter-spacing: 3px; margin: 30px 0 15px; color: var(--text-light-color); }
+        /* NOUVEAU STYLE POUR LA LISTE DES DÉFIS : Plus compacte et lisible */
+        .phase-header { font-weight: 800; font-size: 0.9em; text-transform: uppercase; letter-spacing: 2px; margin: 25px 0 10px; color: var(--text-light-color); }
         .challenge-item {
-            display: flex; flex-direction: column; 
+            display: flex; align-items: center; gap: 15px;
             background: var(--bg-color);
-            padding: 20px; border-radius: 15px; 
-            margin-bottom: 15px; cursor: pointer;
-            text-align: left;
-            box-shadow: 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            padding: 15px; border-radius: 15px; 
+            margin-bottom: 12px; cursor: pointer;
+            box-shadow: 5px 5px 10px var(--shadow-dark), -5px -5px 10px var(--shadow-light);
+            transition: transform 0.2s ease;
         }
-        .challenge-item:not(.locked):hover { transform: scale(1.03); }
-        .challenge-item.locked { opacity: 0.6; cursor: not-allowed; box-shadow: none; }
-        .challenge-header { display: flex; align-items: center; width: 100%; }
-        .challenge-id { font-weight: 800; font-size: 2em; margin-right: 15px; color: var(--accent-color); }
-        .challenge-info { flex-grow: 1; }
-        .challenge-medals-display { font-size: 1.5em; }
-        .challenge-medals-display .medal { margin-left: 5px; opacity: 0.2; transition: all 0.3s; }
+        .challenge-item:not(.locked):hover { transform: scale(1.02); }
+        .challenge-item.locked { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
+        .challenge-id { font-weight: 800; font-size: 1.8em; color: var(--accent-color); flex-shrink: 0; }
+        .challenge-info { flex-grow: 1; text-align: left; }
+        .challenge-info small { color: var(--text-light-color); }
+        .challenge-medals-display { font-size: 1.2em; display: flex; gap: 4px; }
+        .challenge-medals-display .medal { opacity: 0.2; transition: all 0.3s; }
         .challenge-medals-display .medal.bronze { color: var(--bronze); opacity: 1; }
         .challenge-medals-display .medal.silver { color: var(--silver); opacity: 1; }
         .challenge-medals-display .medal.gold { color: var(--gold); opacity: 1; }
 
-        #challenge-objective { background: rgba(0,0,0,0.02); padding: 12px; border-radius: 10px; margin-bottom: 20px; font-size: 0.9em; border-left: 3px solid var(--accent-color); box-shadow: inset 2px 2px 4px var(--shadow-dark), inset -2px -2px 4px var(--shadow-light); }
+        #challenge-objective { background: rgba(0,0,0,0.02); padding: 12px; border-radius: 10px; margin-bottom: 15px; font-size: 0.9em; border-left: 3px solid var(--accent-color); box-shadow: inset 2px 2px 4px var(--shadow-dark), inset -2px -2px 4px var(--shadow-light); }
         
-        /* NOUVEAU PLATEAU DE JEU : Intégré dans la surface */
-        #board-container { position: relative; }
+        /* NOUVEAU PLATEAU DE JEU : Cases circulaires */
+        #game-wrapper { text-align: center; justify-content: space-between; }
         #board {
             display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;
-            margin: 20px auto; width: clamp(270px, 80vmin, 350px);
+            margin: 0 auto; width: clamp(280px, 85vmin, 380px); aspect-ratio: 1 / 1;
             padding: 15px; border-radius: 20px;
             box-shadow: inset 8px 8px 16px var(--shadow-dark), inset -8px -8px 16px var(--shadow-light);
         }
         .cell {
-            aspect-ratio: 1 / 1;
             background-color: var(--bg-color);
-            border-radius: 15px;
+            border-radius: 50%; /* Cases rondes */
             display: grid; place-items: center;
-            font-size: clamp(2.8em, 16vmin, 4em); font-weight: 800;
+            font-size: clamp(2.5em, 15vmin, 4em); font-weight: 800;
             cursor: pointer;
-            box-shadow: 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light);
-            transition: all 0.2s ease;
+            box-shadow: 5px 5px 10px var(--shadow-dark), -5px -5px 10px var(--shadow-light);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
         }
         .cell:not(.x):not(.o):hover { transform: scale(1.05); }
         .cell:not(.x):not(.o):active {
-            transform: scale(0.98);
+            transform: scale(0.95);
             box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
         }
-        .pion { transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s; will-change: transform, opacity; }
+        .pion { transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s; will-change: transform, opacity; }
         .cell.x, .cell.o {
             box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
+            cursor: default;
         }
         .cell.x .pion { color: var(--x-color); }
         .cell.o .pion { color: var(--o-color); }
-        .cell.ghost { animation: ghost-pulse 2s infinite ease-in-out; }
-        @keyframes ghost-pulse { 50% { opacity: 0.4; box-shadow: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light); } }
+        /* NOUVELLE ANIMATION FANTÔME : Pulsation d'opacité, plus légère */
+        .cell.ghost { animation: ghost-pulse 1.8s infinite ease-in-out; }
+        @keyframes ghost-pulse { 50% { opacity: 0.5; } }
         
-        /* NOUVELLE ANIMATION DE PLACEMENT : "POP" satisfaisant */
-        .pion.placed { animation: placePiece 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        /* NOUVELLE ANIMATION DE PLACEMENT : "POP" optimisé */
+        .pion.placed { animation: placePiece 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
         @keyframes placePiece {
-            0% { transform: scale(0.5); opacity: 0; }
-            50% { transform: scale(1.1); opacity: 1; }
-            100% { transform: scale(1); opacity: 1; }
+            from { transform: scale(0.6); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
-        .pion.removed { animation: removePiece 0.3s ease-in forwards; }
-        @keyframes removePiece { to { opacity: 0; transform: scale(0.5); } }
+        .pion.removed { animation: removePiece 0.3s ease-out forwards; }
+        @keyframes removePiece { to { opacity: 0; transform: scale(0.6); } }
         
-        /* NOUVELLE ANIMATION DE VICTOIRE : Subtile et élégante */
-        .winning-cell {
-            animation: highlightWin 1.5s ease-in-out;
-            background-color: var(--accent-color);
-            box-shadow: 0 0 20px var(--accent-color);
+        /* NOUVELLE ANIMATION DE VICTOIRE : Lueur sur le pion, plus performant */
+        .winning-cell .pion {
+            animation: highlightWin 1.2s ease-in-out infinite;
+            color: white !important;
         }
-        .winning-cell .pion { color: white !important; }
-        @keyframes highlightWin { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        @keyframes highlightWin {
+            0%, 100% { text-shadow: 0 0 5px white, 0 0 15px var(--accent-color); transform: scale(1); }
+            50% { text-shadow: 0 0 10px white, 0 0 30px var(--accent-color); transform: scale(1.1); }
+        }
         
-        /* NOUVELLES MODALES : Claires et centrées */
+        /* NOUVELLES MODALES : Animations plus rapides */
         .modal {
             display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%;
             background-color: rgba(90, 100, 115, 0.5);
             -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
             align-items: center; justify-content: center;
-            animation: fadeInModal 0.3s ease forwards;
+            animation: fadeInModal 0.2s ease;
+            padding: 20px;
         }
         @keyframes fadeInModal { from { opacity: 0; } to { opacity: 1; } }
         .modal-content {
             background: var(--bg-color); padding: 30px; border-radius: 20px; text-align: center;
-            max-width: 400px; width: 90%;
-            box-shadow: 12px 12px 24px var(--shadow-dark), -12px -12px 24px var(--shadow-light);
-            animation: modalOpen 0.5s cubic-bezier(0.2, 0.8, 0.2, 1.2);
+            max-width: 400px; width: 100%;
+            box-shadow: 10px 10px 20px var(--shadow-dark), -10px -10px 20px var(--shadow-light);
+            animation: modalOpen 0.4s cubic-bezier(0.2, 0.8, 0.2, 1.2);
         }
-        @keyframes modalOpen { from { transform: translateY(50px) scale(0.9); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
+        @keyframes modalOpen { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         #victory-bonus { color: var(--o-color); font-weight: bold; }
         .share-icon { display: inline-block; width: 20px; height: 20px; border: 2px solid var(--text-color); border-radius: 4px; position: relative; margin: 0 5px; vertical-align: middle; }
         .share-icon::before { content: ''; position: absolute; bottom: 6px; left: 7px; width: 2px; height: 10px; background: var(--text-color); }
@@ -271,10 +272,12 @@
 </head>
 <body>
     
-    <div id="launch-screen">
+    <div id="launch-screen" class="screen">
         <div class="logo">PIONPION</div>
-        <button id="launch-btn">JOUER</button>
-        <button id="add-to-home-btn" class="hidden text-button">Installer l'application</button>
+        <div class="screen-footer">
+            <button id="launch-btn">JOUER</button>
+            <button id="add-to-home-btn" class="hidden text-button">Installer l'application</button>
+        </div>
     </div>
 
     <!-- UI Fixe (boutons de sortie et monnaie) -->
@@ -283,26 +286,32 @@
     
     <!-- Menus principaux (écrans) -->
     <div id="main-menu" class="screen hidden">
-        <div class="logo" style="font-size: 5em;">PIONPION</div>
+        <div class="logo">PIONPION</div>
         <button id="start-campaign-btn">Projet: ASCENSION</button>
         <button id="start-quickplay-btn">Jeu Rapide</button>
         <button id="shop-btn" class="disabled">Boutique (Bientôt)</button>
     </div>
 
     <div id="campaign-screen" class="screen hidden">
-        <h2>Ascension</h2>
-        <div id="campaign-list"></div>
-        <button class="back-to-menu text-button">Menu Principal</button>
+        <div class="screen-header">
+            <h2>Ascension</h2>
+        </div>
+        <div id="campaign-list" class="screen-content"></div>
+        <div class="screen-footer">
+            <button class="back-to-menu text-button">Menu Principal</button>
+        </div>
     </div>
 
     <div id="game-wrapper" class="screen hidden">
-        <div id="challenge-objective" class="hidden"></div>
-        <div id="status" style="margin-bottom: 10px; font-size: 1.2em; font-weight: 600;"></div>
-        <div id="board-container">
+        <div class="screen-header">
+            <div id="challenge-objective" class="hidden"></div>
+            <div id="status" style="margin-bottom: 10px; font-size: 1.2em; font-weight: 600; height: 1.5em;"></div>
+        </div>
+        <div id="board-container" class="screen-content" style="display:grid; place-items:center;">
              <div id="board"></div>
         </div>
-        <div class="controls" style="margin-top: 15px;">
-            <select id="level" class="hidden"></select> <!-- Caché pour l'instant -->
+        <div class="screen-footer controls">
+            <select id="level" class="hidden"></select>
             <button id="reset-btn" style="padding: 15px 30px; font-size: 1em;">Rejouer</button>
             <button class="back-btn text-button">Quitter</button>
         </div>
@@ -334,7 +343,8 @@
 
     <script>
     // ===================================================================
-    // JAVASCRIPT : Logique de jeu conservée, ajustements mineurs
+    // JAVASCRIPT : INCHANGÉ
+    // La logique de jeu est conservée telle quelle.
     // ===================================================================
     document.addEventListener('DOMContentLoaded', () => {
         // Le JS original était déjà très bien structuré. 
@@ -370,7 +380,7 @@
             const isIos = () => /iPhone|iPad|iPod/.test(navigator.userAgent) && !window.MSStream;
             const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
             if (isIos() && !isInStandaloneMode()) { addToHomeBtn.classList.remove('hidden'); }
-            launchBtn.addEventListener('click', () => { if(!isInStandaloneMode()) openFullscreen(); audioManager.init(); haptics.vibrate('light'); launchScreen.classList.add('hidden'); setTimeout(() => { showScreen('mainMenu'); currencyDisplay.classList.remove('hidden'); }, 500); });
+            launchBtn.addEventListener('click', () => { if(!isInStandaloneMode()) openFullscreen(); audioManager.init(); haptics.vibrate('light'); launchScreen.classList.add('hidden'); setTimeout(() => { showScreen('mainMenu'); currencyDisplay.classList.remove('hidden'); }, 300); });
             addToHomeBtn.addEventListener('click', () => openModal(a2hsModal)); closeA2hsModalBtn.addEventListener('click', () => closeModal(a2hsModal));
             exitFullscreenBtn.addEventListener('click', closeFullscreen); document.addEventListener('fullscreenchange', checkFullscreenStatus); document.addEventListener('webkitfullscreenchange', checkFullscreenStatus);
             boardElement.addEventListener('click', handleBoardClick); document.querySelectorAll('button').forEach(b => b.addEventListener('click', () => { audioManager.play('click'); haptics.vibrate('light'); })); document.getElementById('start-campaign-btn').addEventListener('click', showCampaignScreen); document.getElementById('start-quickplay-btn').addEventListener('click', startQuickPlay); document.querySelectorAll('.back-to-menu').forEach(b => b.addEventListener('click', () => showScreen('mainMenu'))); document.querySelectorAll('.back-btn').forEach(b => b.addEventListener('click', () => gameMode === 'campaign' ? showCampaignScreen() : showScreen('mainMenu'))); document.querySelector('.back-to-campaign').addEventListener('click', ()=>{closeModal(victoryModal); showCampaignScreen();}); document.getElementById('next-challenge-btn').addEventListener('click', ()=>{closeModal(victoryModal); startChallenge(currentChallengeId+1);}); resetBtn.addEventListener('click', () => gameMode === 'campaign' ? startChallenge(currentChallengeId) : startQuickPlay());
@@ -388,7 +398,7 @@
 
         function openModal(modal) { modal.style.display = 'flex'; }
         function closeModal(modal) { modal.style.display = 'none'; }
-        function showCampaignScreen() { const list = document.getElementById('campaign-list'); list.innerHTML = ''; let lastPhase = 0; ALL_CHALLENGES.forEach(challenge => { if (challenge.phase > lastPhase) { const header = document.createElement('div'); header.className = 'phase-header'; header.textContent = `PHASE ${challenge.phase}`; list.appendChild(header); lastPhase = challenge.phase; } let progress = campaignProgress.find(p => p.id === challenge.id); if (!progress) { progress = { id: challenge.id, unlocked: challenge.id === 1, medal: 0 }; campaignProgress.push(progress); } progress.unlocked = progress.id === 1 || (campaignProgress.find(p => p.id === challenge.id - 1)?.medal > 0); const item = document.createElement('div'); item.className = 'challenge-item'; if (!progress.unlocked) item.classList.add('locked'); item.innerHTML = ` <div class="challenge-header"> <div class="challenge-id">${challenge.id}</div> <div class="challenge-info"> <div>${challenge.title}</div> <small style="color: var(--text-light-color);">${challenge.objective}</small> </div> <div class="challenge-medals-display">${getMedalHTML(progress.medal)}</div> </div>`; if (progress.unlocked) item.addEventListener('click', () => startChallenge(challenge.id)); list.appendChild(item); }); showScreen('campaign'); }
+        function showCampaignScreen() { const list = document.getElementById('campaign-list'); list.innerHTML = ''; let lastPhase = 0; ALL_CHALLENGES.forEach(challenge => { if (challenge.phase > lastPhase) { const header = document.createElement('div'); header.className = 'phase-header'; header.textContent = `PHASE ${challenge.phase}`; list.appendChild(header); lastPhase = challenge.phase; } let progress = campaignProgress.find(p => p.id === challenge.id); if (!progress) { progress = { id: challenge.id, unlocked: challenge.id === 1, medal: 0 }; campaignProgress.push(progress); } progress.unlocked = progress.id === 1 || (campaignProgress.find(p => p.id === challenge.id - 1)?.medal > 0); const item = document.createElement('div'); item.className = 'challenge-item'; if (!progress.unlocked) item.classList.add('locked'); item.innerHTML = ` <div class="challenge-id">${challenge.id}</div> <div class="challenge-info"> <div>${challenge.title}</div> <small>${challenge.objective}</small> </div> <div class="challenge-medals-display">${getMedalHTML(progress.medal)}</div>`; if (progress.unlocked) item.addEventListener('click', () => startChallenge(challenge.id)); list.appendChild(item); }); showScreen('campaign'); }
         function getMedalHTML(tier) { let html = '<span class="medal">🥉</span><span class="medal">🥈</span><span class="medal">🥇</span>'; if(tier>=1) html=html.replace('class="medal"','class="medal bronze"'); if(tier>=2) html=html.replace('class="medal"','class="medal silver"'); if(tier>=3) html=html.replace('class="medal"','class="medal gold"'); return html; }
         function saveData() { localStorage.setItem('pionpion_ascension_data', JSON.stringify({ currency, campaignProgress })); updateCurrencyDisplay(); }
         function loadData() { const d = JSON.parse(localStorage.getItem('pionpion_ascension_data')); if(d) { currency = d.currency || 0; campaignProgress = d.campaignProgress || []; } else { currency = 0; campaignProgress = []; } updateCurrencyDisplay(); }
