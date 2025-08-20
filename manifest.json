@@ -1,0 +1,16 @@
+{
+  "name": "PIONPION: Projet Ascension",
+  "short_name": "PIONPION",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#10101a",
+  "theme_color": "#10101a",
+  "description": "Un jeu de Tic-Tac-Toe stratégique avec des défis.",
+  "icons": [
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}
