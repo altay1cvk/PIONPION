@@ -7,276 +7,274 @@
     <!-- META-DONNÉES OPTIMISÉES POUR UNE EXPÉRIENCE NATIVE SUR iOS          -->
     <!-- =================================================================== -->
     
-    <!-- Gère la taille de l'affichage et les zones de sécurité (encoche, barre d'accueil) -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-
-    <!-- Active le mode "application web" plein écran une fois ajoutée à l'écran d'accueil -->
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <!-- Style de la barre de statut (heure, batterie) en mode plein écran -->
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <!-- Titre de l'application sous l'icône sur l'écran d'accueil -->
     <meta name="apple-mobile-web-app-title" content="PIONPION">
-    <!-- Icône de l'application pour l'écran d'accueil iOS (essentiel) -->
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png"> <!-- Assurez-vous d'avoir une icône 180x180px à cette URL -->
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png"> 
     
-    <!-- Manifest pour la PWA (standard et Android) -->
     <link rel="manifest" href="manifest.json">
-    <!-- Couleur du thème pour la barre d'URL sur les navigateurs compatibles -->
-    <meta name="theme-color" content="#10101a">
+    <meta name="theme-color" content="#e0e5ec">
 
-    <title>PIONPION - Projet: ASCENSION v2.0</title>
+    <title>PIONPION - Projet: ASCENSION v3.0 (Refonte)</title>
     
     <style>
         /* =================================================================== */
-        /* NOUVELLE DIRECTION ARTISTIQUE & OPTIMISATIONS CSS POUR SAFARI/iOS   */
+        /* NOUVELLE DIRECTION ARTISTIQUE : "NEUMORPHISME DOUX" & TACTILE     */
+        /* CSS 100% repensé pour la fluidité et la compatibilité iOS / Safari */
         /* =================================================================== */
         :root {
-            /* Palette de couleurs "Neon Noir" */
-            --bg-color: #10101a;
-            --container-bg: rgba(20, 20, 30, 0.8);
-            --cell-bg: rgba(10, 10, 20, 0.6);
-            --x-color: #ff3c5f;
-            --o-color: #00bfff;
-            --text-color: #e0e0ff;
-            --win-glow: #f1c40f;
-            --accent-color: #ff3c5f;
-            --border-color: rgba(0, 191, 255, 0.3);
+            /* Palette de couleurs "Neumorphisme Doux" */
+            --bg-color: #e0e5ec;
+            --accent-color: #007aff; /* Bleu natif iOS */
+            --x-color: #ff3b30;     /* Rouge natif iOS */
+            --o-color: #34c759;     /* Vert natif iOS */
+            --text-color: #5a6473;
+            --text-light-color: #9ba6b8;
+            --shadow-light: #ffffff;
+            --shadow-dark: #a3b1c6;
             --bronze: #cd7f32; --silver: #c0c0c0; --gold: #ffd700;
             
-            /* Variables pour les zones de sécurité de l'iPhone (encoche, etc.) */
+            /* Zones de sécurité de l'iPhone (encoche, barre d'accueil) */
             --safe-area-inset-top: env(safe-area-inset-top, 0px);
             --safe-area-inset-right: env(safe-area-inset-right, 0px);
             --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
             --safe-area-inset-left: env(safe-area-inset-left, 0px);
         }
 
-        /* Importation des polices */
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Bebas+Neue&display=swap');
+        /* Importation de la police "Inter", parfaite pour les UI modernes */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
         
         /* Reset et améliorations globales */
         * { 
             box-sizing: border-box; 
-            -webkit-user-select: none; /* Empêche la sélection de texte */
-            user-select: none;
-            -webkit-tap-highlight-color: transparent; /* Supprime le flash gris au toucher sur iOS */
+            -webkit-user-select: none; user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
-        html, body {
-            -webkit-text-size-adjust: 100%; /* Empêche le zoom auto du texte sur iOS */
+        html {
+            -webkit-text-size-adjust: 100%;
         }
 
-        /* OPTIMISATION 1 : Layout principal robuste pour tous les écrans mobiles */
+        /* NOUVEAU BODY : Layout principal clair et aéré */
         body { 
-            font-family: 'Poppins', sans-serif; 
-            background: linear-gradient(-45deg, #10101a, #1a1a2e, #2a2a3a, #1a1a2e); 
-            background-size: 400% 400%; 
-            animation: gradientBG 15s ease infinite; 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg-color);
             color: var(--text-color); 
-            height: 100dvh; /* Utilise la hauteur dynamique du viewport, parfait pour Safari mobile */
+            height: 100dvh; /* Hauteur dynamique du viewport, idéal pour Safari mobile */
             margin: 0; 
-            overflow: hidden; /* Empêche tout défilement accidentel */
+            overflow: hidden;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             padding: 1rem;
         }
-        @keyframes gradientBG { 0% {background-position: 0% 50%;} 50% {background-position: 100% 50%;} 100% {background-position: 0% 50%;} }
         
-        /* Écran de lancement initial */
+        /* NOUVEL ÉCRAN DE LANCEMENT : Minimaliste et direct */
         #launch-screen {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            height: 100%;
-            gap: 20px;
-            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            display: flex; flex-direction: column; justify-content: center;
+            align-items: center; width: 100%; height: 100%; gap: 25px;
+            transition: opacity 0.5s ease, transform 0.5s ease;
         }
         #launch-screen.hidden {
-            opacity: 0;
-            transform: scale(1.1);
-            pointer-events: none;
+            opacity: 0; transform: scale(1.05); pointer-events: none;
         }
         #launch-screen .logo {
-            font-family: 'Bebas Neue', cursive;
+            font-weight: 800;
             font-size: clamp(4em, 20vmin, 8em);
-            text-shadow: 0 0 5px #fff, 0 0 10px var(--accent-color), 0 0 20px var(--accent-color);
-        }
-        #launch-btn {
-            font-size: 1.5em;
-            padding: 20px 40px;
-            animation: pulse-glow 2s infinite;
+            color: var(--text-light-color);
+            text-shadow: 2px 2px 5px var(--shadow-dark), -2px -2px 5px var(--shadow-light);
         }
         
-        #add-to-home-btn {
-            font-size: 1em; padding: 12px 24px; background: transparent; border: 1px solid var(--border-color);
+        /* NOUVEAUX BOUTONS : L'effet "pressé" tactile (Neumorphisme) */
+        button { 
+            font-family: 'Inter', sans-serif; font-weight: 600; cursor: pointer; 
+            border: none;
+            background-color: var(--bg-color); 
+            color: var(--text-color); 
+            border-radius: 20px; 
+            transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+            padding: 20px 40px; font-size: 1.2em; margin: 10px 0;
+            box-shadow: 8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light);
+            will-change: transform, box-shadow;
         }
-        .share-icon { display: inline-block; width: 20px; height: 20px; border: 2px solid var(--text-color); border-radius: 4px; position: relative; margin: 0 5px; vertical-align: middle; }
-        .share-icon::before { content: ''; position: absolute; bottom: 6px; left: 7px; width: 2px; height: 10px; background: var(--text-color); }
-        .share-icon::after { content: ''; position: absolute; bottom: 12px; left: 4px; border-left: 3px solid transparent; border-right: 3px solid transparent; border-bottom: 5px solid var(--text-color); }
+        button:hover, button:focus-visible {
+            transform: translateY(-2px);
+            color: var(--accent-color);
+        }
+        button:active {
+            transform: translateY(1px);
+            box-shadow: inset 6px 6px 12px var(--shadow-dark), inset -6px -6px 12px var(--shadow-light);
+            transition-duration: 0.1s;
+        }
+        button.disabled {
+            opacity: 0.6; cursor: not-allowed;
+            transform: none !important; color: var(--text-light-color) !important;
+            box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light) !important;
+        }
+        button.text-button { /* Pour les boutons moins proéminents */
+            box-shadow: none; background: transparent; color: var(--text-light-color); font-size: 1em;
+        }
+        button.text-button:hover { color: var(--accent-color); }
+        button.text-button:active { background: rgba(0,0,0,0.05); transform: none; box-shadow: none; }
 
-        @keyframes pulse-glow { 0% { box-shadow: 0 0 15px var(--border-color); } 50% { box-shadow: 0 0 30px var(--win-glow); } 100% { box-shadow: 0 0 15px var(--border-color); } }
-
-        /* OPTIMISATION 2 : Éléments fixes avec gestion des zones de sécurité d'iOS */
+        /* NOUVELLE UI FIXE : Intégrée et discrète */
         .fixed-ui-element {
             position: fixed;
-            background: var(--cell-bg);
-            border: 1px solid var(--border-color);
-            -webkit-backdrop-filter: blur(10px);
-            backdrop-filter: blur(10px);
+            background: var(--bg-color);
+            box-shadow: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light);
             z-index: 100;
-            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+            transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1.2);
         }
+        .fixed-ui-element.hidden { transform: translateY(-200%); }
+
         #exit-fullscreen-btn {
             top: max(15px, var(--safe-area-inset-top));
             left: max(15px, var(--safe-area-inset-left));
             width: 45px; height: 45px; border-radius: 50%;
             display: grid; place-items: center;
-            font-size: 2.2em; line-height: 1; font-family: sans-serif; cursor: pointer;
-            transition: transform 0.3s, background-color 0.2s;
+            font-size: 2.2em; line-height: 1; font-weight: 300;
         }
-        #exit-fullscreen-btn:hover { background-color: var(--accent-color); transform: scale(1.1) rotate(90deg); }
-        #exit-fullscreen-btn.hidden { transform: translateY(-200%); }
+        #exit-fullscreen-btn:active {
+             box-shadow: inset 2px 2px 4px var(--shadow-dark), inset -2px -2px 4px var(--shadow-light);
+        }
         
         .currency-display { 
             top: max(15px, var(--safe-area-inset-top));
             right: max(15px, var(--safe-area-inset-right));
-            padding: 5px 15px; border-radius: 20px; 
-            font-size: 1.2em; 
+            padding: 10px 20px; border-radius: 20px; 
+            font-size: 1.2em; font-weight: 600;
         }
-        .currency-display.hidden { transform: translateY(-200%); }
         .currency-display.reward-pulse { animation: pulse 0.5s; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
         
-        /* OPTIMISATION 3 : Conteneur principal et transitions d'écran fluides */
+        /* NOUVEAUX ÉCRANS & TRANSITIONS FLUIDES */
         .screen { 
             width: 100%; max-width: 500px;
-            background: var(--container-bg); border-radius: 25px; 
-            padding: clamp(1rem, 4vw, 2rem);
-            border: 1px solid var(--border-color); 
-            box-shadow: 0 0 30px rgba(0, 191, 255, 0.15), inset 0 0 20px rgba(0, 0, 0, 0.5); 
-            -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); 
-            text-align: center;
-            /* Animation de transition très performante */
+            padding: clamp(1.5rem, 5vw, 2.5rem); text-align: center;
             transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
             will-change: opacity, transform;
-            max-height: calc(100dvh - 2rem);
-            overflow-y: auto;
+            max-height: calc(100dvh - 2rem); overflow-y: auto;
         }
         .screen.hidden {
-            opacity: 0;
-            transform: translateY(20px) scale(0.98); /* Ajout d'un léger décalage vertical */
-            pointer-events: none;
-            position: absolute; /* Permet aux écrans de ne pas s'empiler physiquement */
+            opacity: 0; transform: scale(0.95);
+            pointer-events: none; position: absolute;
         }
         
-        h1, h2 { font-family: 'Bebas Neue', cursive; letter-spacing: 5px; margin: 0 0 20px 0; color: var(--text-color); text-shadow: 0 0 5px #fff, 0 0 8px var(--accent-color); }
-        h1 { font-size: clamp(2.8em, 11vmin, 4.5em); } h2 { font-size: clamp(1.8em, 7vmin, 2.8em); }
-        
-        /* OPTIMISATION 4 : Boutons "vivants" et réactifs */
-        button { 
-            font-family: 'Poppins', sans-serif; cursor: pointer; border: 1px solid var(--border-color); 
-            background-color: var(--cell-bg); color: var(--text-color); border-radius: 10px; 
-            transition: background-color 0.2s, box-shadow 0.2s, transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
-            padding: 15px 30px; font-size: 1.2em; margin: 10px 0;
-            will-change: transform; /* Prépare le navigateur à l'animation */
-            position: relative; overflow: hidden; 
-        }
-        button:hover, button:focus-visible { /* Ajout de focus-visible pour l'accessibilité */
-            background-color: var(--border-color);
-            box-shadow: 0 0 15px var(--border-color);
-            transform: translateY(-4px) scale(1.02);
-        }
-        button:active {
-            transform: scale(0.97) translateY(-2px);
-            transition-duration: 0.1s;
-        }
-        button.disabled {
-            opacity: 0.5; cursor: not-allowed; transform: none !important;
-            box-shadow: none !important; background-color: var(--cell-bg) !important;
-        }
-        
-        .currency-flyer { position: fixed; z-index: 2000; color: var(--win-glow); transition: transform 1s cubic-bezier(0.5, -0.5, 1, 1), opacity 1s ease; will-change: transform, opacity; font-size: 1.5em; text-shadow: 0 0 10px var(--win-glow); }
+        h1, h2 { font-weight: 800; letter-spacing: 2px; margin: 0 0 25px 0; color: var(--text-light-color); }
+        h1 { font-size: clamp(3em, 12vmin, 5em); } 
+        h2 { font-size: clamp(2em, 8vmin, 3em); }
         
         #main-menu .logo { font-size: 5em; margin-bottom: 20px; }
-        #main-menu button { display: block; width: 90%; max-width: 350px; margin: 15px auto; }
+        #main-menu button { display: block; width: 90%; max-width: 350px; margin: 20px auto; }
         
-        /* OPTIMISATION 5 : Scrolling natif et fluide sur iOS */
+        /* NOUVEAU STYLE POUR LA LISTE DES DÉFIS */
         #campaign-list {
-            max-height: 55vh; overflow-y: auto; padding-right: 10px;
-            -webkit-overflow-scrolling: touch; /* Active le défilement inertiel sur iOS */
+            max-height: 55vh; overflow-y: auto;
+            -webkit-overflow-scrolling: touch; /* Défilement inertiel sur iOS */
         }
-        
-        .phase-header { font-family: 'Bebas Neue'; font-size: 1.5em; letter-spacing: 3px; margin-top: 20px; margin-bottom: 10px; color: var(--o-color); border-bottom: 1px solid var(--o-color); padding-bottom: 5px; }
-        .challenge-item { display: flex; flex-direction: column; background: var(--cell-bg); padding: 15px; border-radius: 10px; margin-bottom: 10px; cursor: pointer; transition: background-color 0.2s, transform 0.2s; text-align: left; }
-        .challenge-item:not(.locked):hover { background-color: rgba(255,255,255,0.1); transform: scale(1.02); }
-        .challenge-item.locked { opacity: 0.5; cursor: not-allowed; }
+        .phase-header { font-weight: 800; font-size: 1.1em; text-transform: uppercase; letter-spacing: 3px; margin: 30px 0 15px; color: var(--text-light-color); }
+        .challenge-item {
+            display: flex; flex-direction: column; 
+            background: var(--bg-color);
+            padding: 20px; border-radius: 15px; 
+            margin-bottom: 15px; cursor: pointer;
+            text-align: left;
+            box-shadow: 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .challenge-item:not(.locked):hover { transform: scale(1.03); }
+        .challenge-item.locked { opacity: 0.6; cursor: not-allowed; box-shadow: none; }
         .challenge-header { display: flex; align-items: center; width: 100%; }
-        .challenge-id { font-family: 'Bebas Neue'; font-size: 2em; margin-right: 15px; }
+        .challenge-id { font-weight: 800; font-size: 2em; margin-right: 15px; color: var(--accent-color); }
         .challenge-info { flex-grow: 1; }
         .challenge-medals-display { font-size: 1.5em; }
-        .challenge-medals-display .medal { margin-left: 5px; opacity: 0.3; transition: all 0.3s; }
-        .challenge-medals-display .medal.bronze { color: var(--bronze); opacity: 1; text-shadow: 0 0 5px var(--bronze); }
-        .challenge-medals-display .medal.silver { color: var(--silver); opacity: 1; text-shadow: 0 0 5px var(--silver); }
-        .challenge-medals-display .medal.gold { color: var(--gold); opacity: 1; text-shadow: 0 0 5px var(--gold); }
-        .medal-objectives { font-size: 0.8em; margin-top: 10px; padding-left: 10px; border-left: 2px solid var(--border-color); opacity: 0.7; max-height: 0; overflow: hidden; transition: max-height 0.4s ease-in-out; }
-        .challenge-item:not(.locked):hover .medal-objectives { max-height: 100px; /* Dévoile les objectifs au survol */ }
-        #challenge-objective { background: rgba(0,0,0,0.3); padding: 10px; border-radius: 10px; margin-bottom: 15px; font-size: 0.9em; border-left: 3px solid var(--win-glow); }
+        .challenge-medals-display .medal { margin-left: 5px; opacity: 0.2; transition: all 0.3s; }
+        .challenge-medals-display .medal.bronze { color: var(--bronze); opacity: 1; }
+        .challenge-medals-display .medal.silver { color: var(--silver); opacity: 1; }
+        .challenge-medals-display .medal.gold { color: var(--gold); opacity: 1; }
+
+        #challenge-objective { background: rgba(0,0,0,0.02); padding: 12px; border-radius: 10px; margin-bottom: 20px; font-size: 0.9em; border-left: 3px solid var(--accent-color); box-shadow: inset 2px 2px 4px var(--shadow-dark), inset -2px -2px 4px var(--shadow-light); }
         
+        /* NOUVEAU PLATEAU DE JEU : Intégré dans la surface */
         #board-container { position: relative; }
-        #board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 20px auto; width: clamp(270px, 80vmin, 350px); max-width: 100%; }
-        .cell {
-            aspect-ratio: 1 / 1; background-color: var(--cell-bg); border-radius: 15px;
-            border: 1px solid var(--border-color); display: grid; place-items: center;
-            font-size: clamp(2.5em, 15vmin, 3.5em); font-weight: 600; cursor: pointer;
-            transition: transform 0.2s ease, border-color 0.2s;
-            will-change: transform;
+        #board {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;
+            margin: 20px auto; width: clamp(270px, 80vmin, 350px);
+            padding: 15px; border-radius: 20px;
+            box-shadow: inset 8px 8px 16px var(--shadow-dark), inset -8px -8px 16px var(--shadow-light);
         }
-        .cell:hover { transform: scale(1.05); border-color: var(--win-glow); }
-        .cell:active { transform: scale(0.98); }
-        .pion { transition: transform 0.3s, opacity 0.3s; will-change: transform, opacity; }
-        .cell.x .pion { color: var(--x-color); text-shadow: 0 0 10px var(--x-color); }
-        .cell.o .pion { color: var(--o-color); text-shadow: 0 0 10px var(--o-color); }
-        .cell.ghost .pion { animation: ghost-pulse 2s infinite ease-in-out; opacity: 0.3; }
-        @keyframes ghost-pulse { 50% { opacity: 0.5; transform: scale(0.95); } }
+        .cell {
+            aspect-ratio: 1 / 1;
+            background-color: var(--bg-color);
+            border-radius: 15px;
+            display: grid; place-items: center;
+            font-size: clamp(2.8em, 16vmin, 4em); font-weight: 800;
+            cursor: pointer;
+            box-shadow: 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light);
+            transition: all 0.2s ease;
+        }
+        .cell:not(.x):not(.o):hover { transform: scale(1.05); }
+        .cell:not(.x):not(.o):active {
+            transform: scale(0.98);
+            box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
+        }
+        .pion { transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s; will-change: transform, opacity; }
+        .cell.x, .cell.o {
+            box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
+        }
+        .cell.x .pion { color: var(--x-color); }
+        .cell.o .pion { color: var(--o-color); }
+        .cell.ghost { animation: ghost-pulse 2s infinite ease-in-out; }
+        @keyframes ghost-pulse { 50% { opacity: 0.4; box-shadow: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light); } }
         
-        /* OPTIMISATION 6 : Animation de placement de pion "élastique" et satisfaisante */
-        .pion.placed { animation: placePiece 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
-        @keyframes placePiece { from { transform: scale(0) rotate(-180deg); opacity: 0; } to { transform: scale(1) rotate(0deg); opacity: 1; } }
+        /* NOUVELLE ANIMATION DE PLACEMENT : "POP" satisfaisant */
+        .pion.placed { animation: placePiece 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        @keyframes placePiece {
+            0% { transform: scale(0.5); opacity: 0; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
         .pion.removed { animation: removePiece 0.3s ease-in forwards; }
-        @keyframes removePiece { to { opacity: 0; transform: scale(0); } }
+        @keyframes removePiece { to { opacity: 0; transform: scale(0.5); } }
         
-        .winning-cell { animation: highlightWin 1.5s infinite ease-in-out; border-color: var(--win-glow) !important; }
-        @keyframes highlightWin { 50% { transform: scale(1.05); box-shadow: 0 0 20px var(--win-glow); } }
-        .particle { position: absolute; background: var(--win-glow); border-radius: 50%; animation: fly-out 1s ease-out forwards; will-change: transform, opacity; box-shadow: 0 0 10px var(--win-glow); }
-        @keyframes fly-out { to { transform: var(--transform-end); opacity: 0; } }
+        /* NOUVELLE ANIMATION DE VICTOIRE : Subtile et élégante */
+        .winning-cell {
+            animation: highlightWin 1.5s ease-in-out;
+            background-color: var(--accent-color);
+            box-shadow: 0 0 20px var(--accent-color);
+        }
+        .winning-cell .pion { color: white !important; }
+        @keyframes highlightWin { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
         
-        /* Modales (fenêtres pop-up) */
+        /* NOUVELLES MODALES : Claires et centrées */
         .modal {
             display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.8); align-items: center; justify-content: center;
-            -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px);
-            animation: fadeInModal 0.3s ease;
+            background-color: rgba(90, 100, 115, 0.5);
+            -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+            align-items: center; justify-content: center;
+            animation: fadeInModal 0.3s ease forwards;
         }
         @keyframes fadeInModal { from { opacity: 0; } to { opacity: 1; } }
         .modal-content {
-            background: var(--container-bg); padding: 30px; border-radius: 15px; text-align: center;
-            max-width: 400px; width: 90%; border: 1px solid var(--border-color);
-            animation: modalOpen 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+            background: var(--bg-color); padding: 30px; border-radius: 20px; text-align: center;
+            max-width: 400px; width: 90%;
+            box-shadow: 12px 12px 24px var(--shadow-dark), -12px -12px 24px var(--shadow-light);
+            animation: modalOpen 0.5s cubic-bezier(0.2, 0.8, 0.2, 1.2);
         }
         @keyframes modalOpen { from { transform: translateY(50px) scale(0.9); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
-        #victory-bonus { color: var(--win-glow); font-weight: bold; animation: bonus-pulse 1s infinite; }
-        @keyframes bonus-pulse { 50% { text-shadow: 0 0 15px var(--win-glow); } }
+        #victory-bonus { color: var(--o-color); font-weight: bold; }
+        .share-icon { display: inline-block; width: 20px; height: 20px; border: 2px solid var(--text-color); border-radius: 4px; position: relative; margin: 0 5px; vertical-align: middle; }
+        .share-icon::before { content: ''; position: absolute; bottom: 6px; left: 7px; width: 2px; height: 10px; background: var(--text-color); }
+        .share-icon::after { content: ''; position: absolute; bottom: 12px; left: 4px; border-left: 3px solid transparent; border-right: 3px solid transparent; border-bottom: 5px solid var(--text-color); }
     </style>
 </head>
 <body>
     
-    <!-- Écran de lancement initial qui disparaît après interaction -->
     <div id="launch-screen">
         <div class="logo">PIONPION</div>
-        <button id="launch-btn">LANCER</button>
-        <button id="add-to-home-btn" class="hidden">Installer l'application</button>
+        <button id="launch-btn">JOUER</button>
+        <button id="add-to-home-btn" class="hidden text-button">Installer l'application</button>
     </div>
 
     <!-- UI Fixe (boutons de sortie et monnaie) -->
@@ -285,7 +283,7 @@
     
     <!-- Menus principaux (écrans) -->
     <div id="main-menu" class="screen hidden">
-        <div class="logo">PIONPION</div>
+        <div class="logo" style="font-size: 5em;">PIONPION</div>
         <button id="start-campaign-btn">Projet: ASCENSION</button>
         <button id="start-quickplay-btn">Jeu Rapide</button>
         <button id="shop-btn" class="disabled">Boutique (Bientôt)</button>
@@ -294,19 +292,19 @@
     <div id="campaign-screen" class="screen hidden">
         <h2>Ascension</h2>
         <div id="campaign-list"></div>
-        <button class="back-to-menu">Menu Principal</button>
+        <button class="back-to-menu text-button">Menu Principal</button>
     </div>
 
     <div id="game-wrapper" class="screen hidden">
         <div id="challenge-objective" class="hidden"></div>
-        <div id="status"></div>
+        <div id="status" style="margin-bottom: 10px; font-size: 1.2em; font-weight: 600;"></div>
         <div id="board-container">
              <div id="board"></div>
         </div>
-        <div class="controls">
-            <select id="level" class="hidden"><option value="easy">Facile</option><option value="intermediate">Intermédiaire</option><option value="hard">Difficile</option></select>
-            <button id="reset-btn">Rejouer</button>
-            <button class="back-btn">Quitter</button>
+        <div class="controls" style="margin-top: 15px;">
+            <select id="level" class="hidden"></select> <!-- Caché pour l'instant -->
+            <button id="reset-btn" style="padding: 15px 30px; font-size: 1em;">Rejouer</button>
+            <button class="back-btn text-button">Quitter</button>
         </div>
     </div>
 
@@ -315,10 +313,10 @@
         <div class="modal-content">
             <h2 id="victory-title">Défi Réussi !</h2>
             <div id="victory-medals" style="font-size: 2em; margin: 10px 0;"></div>
-            <p>Récompense : <span id="victory-reward"></span> ✨</p>
+            <p>Récompense : <span id="victory-reward" style="font-weight: bold;"></span> ✨</p>
             <p id="victory-bonus-text" class="hidden">Bonus Critique ! +<span id="victory-bonus"></span> ✨</p>
             <button id="next-challenge-btn">Défi Suivant</button>
-            <button class="back-to-campaign">Retour aux Défis</button>
+            <button class="back-to-campaign text-button">Retour aux Défis</button>
         </div>
     </div>
     
@@ -327,7 +325,7 @@
             <h2>Installer l'application</h2>
             <p>Pour la meilleure expérience, ajoutez PIONPION à votre écran d'accueil :</p>
             <p style="margin: 20px 0;">
-                Appuyez sur <span class="share-icon"></span> puis sélectionnez<br>
+                Appuyez sur l'icône de partage <span class="share-icon"></span> puis sélectionnez<br>
                 <strong>"Sur l'écran d'accueil"</strong>.
             </p>
             <button id="close-a2hs-modal-btn">Compris !</button>
@@ -335,18 +333,19 @@
     </div>
 
     <script>
-    // OPTIMISATION 7 : Logique Javascript
-    // Le JS original était déjà bon. Les modifications sont mineures pour s'assurer
-    // que le pilotage des classes CSS active les nouvelles animations plus fluides.
-    
+    // ===================================================================
+    // JAVASCRIPT : Logique de jeu conservée, ajustements mineurs
+    // ===================================================================
     document.addEventListener('DOMContentLoaded', () => {
+        // Le JS original était déjà très bien structuré. 
+        // Les modifications sont minimes et visent principalement à s'adapter au nouveau design.
         const audioManager = {
             ctx: null, isUnlocked: false,
             init() { if (this.isUnlocked || typeof AudioContext === 'undefined') return; this.ctx = new (window.AudioContext || window.webkitAudioContext)(); this.isUnlocked = true; },
             play(type) { if (!this.isUnlocked) return; let osc = this.ctx.createOscillator(); let gain = this.ctx.createGain(); osc.connect(gain); gain.connect(this.ctx.destination); const now = this.ctx.currentTime; gain.gain.setValueAtTime(0.5, now); switch (type) { case 'click': osc.frequency.setValueAtTime(440, now); gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.1); break; case 'place': osc.frequency.setValueAtTime(261.63, now); gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.2); break; case 'win': osc.frequency.setValueAtTime(523.25, now); osc.frequency.linearRampToValueAtTime(1046.50, now + 0.3); gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.4); break; case 'lose': osc.frequency.setValueAtTime(220, now); osc.frequency.linearRampToValueAtTime(110, now + 0.4); gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.5); break; case 'coin': osc.frequency.setValueAtTime(880, now); gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.15); break; } osc.start(now); osc.stop(now + 0.5); }
         };
 
-        const haptics = { // OPTIMISATION : Ajout de retours haptiques pour une sensation plus tangible
+        const haptics = {
             vibrate(type = 'light') {
                 if ('vibrate' in navigator) {
                     try {
@@ -371,7 +370,7 @@
             const isIos = () => /iPhone|iPad|iPod/.test(navigator.userAgent) && !window.MSStream;
             const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
             if (isIos() && !isInStandaloneMode()) { addToHomeBtn.classList.remove('hidden'); }
-            launchBtn.addEventListener('click', () => { if(!isInStandaloneMode()) openFullscreen(); audioManager.init(); haptics.vibrate('light'); launchScreen.classList.add('hidden'); setTimeout(() => { showScreen('mainMenu'); }, 500); });
+            launchBtn.addEventListener('click', () => { if(!isInStandaloneMode()) openFullscreen(); audioManager.init(); haptics.vibrate('light'); launchScreen.classList.add('hidden'); setTimeout(() => { showScreen('mainMenu'); currencyDisplay.classList.remove('hidden'); }, 500); });
             addToHomeBtn.addEventListener('click', () => openModal(a2hsModal)); closeA2hsModalBtn.addEventListener('click', () => closeModal(a2hsModal));
             exitFullscreenBtn.addEventListener('click', closeFullscreen); document.addEventListener('fullscreenchange', checkFullscreenStatus); document.addEventListener('webkitfullscreenchange', checkFullscreenStatus);
             boardElement.addEventListener('click', handleBoardClick); document.querySelectorAll('button').forEach(b => b.addEventListener('click', () => { audioManager.play('click'); haptics.vibrate('light'); })); document.getElementById('start-campaign-btn').addEventListener('click', showCampaignScreen); document.getElementById('start-quickplay-btn').addEventListener('click', startQuickPlay); document.querySelectorAll('.back-to-menu').forEach(b => b.addEventListener('click', () => showScreen('mainMenu'))); document.querySelectorAll('.back-btn').forEach(b => b.addEventListener('click', () => gameMode === 'campaign' ? showCampaignScreen() : showScreen('mainMenu'))); document.querySelector('.back-to-campaign').addEventListener('click', ()=>{closeModal(victoryModal); showCampaignScreen();}); document.getElementById('next-challenge-btn').addEventListener('click', ()=>{closeModal(victoryModal); startChallenge(currentChallengeId+1);}); resetBtn.addEventListener('click', () => gameMode === 'campaign' ? startChallenge(currentChallengeId) : startQuickPlay());
@@ -380,35 +379,32 @@
         function showScreen(screenName) {
             const oldScreen = screens[currentScreen];
             if (oldScreen) oldScreen.classList.add('hidden');
-            
             const newScreen = screens[screenName];
             if (newScreen) newScreen.classList.remove('hidden');
-            
             currentScreen = screenName;
-            currencyDisplay.classList.toggle('hidden', screenName !== 'campaign' && screenName !== 'game');
+            const showCurrency = screenName === 'campaign' || screenName === 'mainMenu';
+            currencyDisplay.classList.toggle('hidden', !showCurrency);
         }
 
         function openModal(modal) { modal.style.display = 'flex'; }
         function closeModal(modal) { modal.style.display = 'none'; }
-        function showCampaignScreen() { const list = document.getElementById('campaign-list'); list.innerHTML = ''; let lastPhase = 0; ALL_CHALLENGES.forEach(challenge => { if (challenge.phase > lastPhase) { const header = document.createElement('div'); header.className = 'phase-header'; header.textContent = `PHASE ${challenge.phase}`; list.appendChild(header); lastPhase = challenge.phase; } let progress = campaignProgress.find(p => p.id === challenge.id); if (!progress) { progress = { id: challenge.id, unlocked: challenge.id === 1, medal: 0 }; campaignProgress.push(progress); } progress.unlocked = progress.id === 1 || (campaignProgress.find(p => p.id === challenge.id - 1)?.medal > 0); const item = document.createElement('div'); item.className = 'challenge-item'; if (!progress.unlocked) item.classList.add('locked'); item.innerHTML = ` <div class="challenge-header"> <div class="challenge-id">${challenge.id}</div> <div class="challenge-info"> <div>${challenge.title}</div> <small>${challenge.objective}</small> </div> <div class="challenge-medals-display">${getMedalHTML(progress.medal)}</div> </div> <div class="medal-objectives"> <div>🥉 ${challenge.medals.bronze.desc}</div> <div>🥈 ${challenge.medals.silver.desc}</div> <div>🥇 ${challenge.medals.gold.desc}</div> </div> `; if (progress.unlocked) item.addEventListener('click', () => startChallenge(challenge.id)); list.appendChild(item); }); showScreen('campaign'); }
+        function showCampaignScreen() { const list = document.getElementById('campaign-list'); list.innerHTML = ''; let lastPhase = 0; ALL_CHALLENGES.forEach(challenge => { if (challenge.phase > lastPhase) { const header = document.createElement('div'); header.className = 'phase-header'; header.textContent = `PHASE ${challenge.phase}`; list.appendChild(header); lastPhase = challenge.phase; } let progress = campaignProgress.find(p => p.id === challenge.id); if (!progress) { progress = { id: challenge.id, unlocked: challenge.id === 1, medal: 0 }; campaignProgress.push(progress); } progress.unlocked = progress.id === 1 || (campaignProgress.find(p => p.id === challenge.id - 1)?.medal > 0); const item = document.createElement('div'); item.className = 'challenge-item'; if (!progress.unlocked) item.classList.add('locked'); item.innerHTML = ` <div class="challenge-header"> <div class="challenge-id">${challenge.id}</div> <div class="challenge-info"> <div>${challenge.title}</div> <small style="color: var(--text-light-color);">${challenge.objective}</small> </div> <div class="challenge-medals-display">${getMedalHTML(progress.medal)}</div> </div>`; if (progress.unlocked) item.addEventListener('click', () => startChallenge(challenge.id)); list.appendChild(item); }); showScreen('campaign'); }
         function getMedalHTML(tier) { let html = '<span class="medal">🥉</span><span class="medal">🥈</span><span class="medal">🥇</span>'; if(tier>=1) html=html.replace('class="medal"','class="medal bronze"'); if(tier>=2) html=html.replace('class="medal"','class="medal silver"'); if(tier>=3) html=html.replace('class="medal"','class="medal gold"'); return html; }
         function saveData() { localStorage.setItem('pionpion_ascension_data', JSON.stringify({ currency, campaignProgress })); updateCurrencyDisplay(); }
         function loadData() { const d = JSON.parse(localStorage.getItem('pionpion_ascension_data')); if(d) { currency = d.currency || 0; campaignProgress = d.campaignProgress || []; } else { currency = 0; campaignProgress = []; } updateCurrencyDisplay(); }
         function updateCurrencyDisplay(animate = false) { currencyAmount.textContent = currency; if (animate) { currencyDisplay.classList.add('reward-pulse'); setTimeout(() => currencyDisplay.classList.remove('reward-pulse'), 500); } }
-        function startQuickPlay() { gameMode = 'quickplay'; document.getElementById('challenge-objective').classList.add('hidden'); levelSelect.classList.remove('hidden'); startNewRound(); showScreen('game'); }
-        function startChallenge(id) { const challenge = ALL_CHALLENGES.find(c => c.id === id); if (!challenge) return; gameMode = 'campaign'; currentChallengeId = id; const o = document.getElementById('challenge-objective'); o.textContent = `Objectif: ${challenge.objective}`; o.classList.remove('hidden'); levelSelect.classList.add('hidden'); levelSelect.value = challenge.difficulty; startNewRound(challenge.preset); showScreen('game'); }
-        function endGame(winnerInfo) { gameActive = false; if (winnerInfo.winner === 'X') { audioManager.play('win'); haptics.vibrate('success'); statusElement.textContent = `Vous avez gagné !`; winnerInfo.line.forEach(i => boardElement.children[i].classList.add('winning-cell')); createVictoryParticles(winnerInfo.line); if (gameMode === 'campaign') { handleCampaignVictory(winnerInfo); } } else { audioManager.play('lose'); haptics.vibrate('error'); statusElement.textContent = `Vous avez perdu !`; if(winnerInfo.line) winnerInfo.line.forEach(i => boardElement.children[i].classList.add('winning-cell')); } }
-        function handleCampaignVictory(winnerInfo) { const challenge = ALL_CHALLENGES.find(c => c.id === currentChallengeId); let progress = campaignProgress.find(p => p.id === currentChallengeId); const oldMedalTier = progress.medal; const cond = { bronze: challenge.medals.bronze.check(winnerInfo, playerMoveCount), silver: false, gold: false }; if (cond.bronze) cond.silver = challenge.medals.silver.check(winnerInfo, playerMoveCount, cond); if (cond.silver) cond.gold = challenge.medals.gold.check(winnerInfo, playerMoveCount, cond); let newMedalTier = 0; if(cond.gold) newMedalTier=3; else if(cond.silver) newMedalTier=2; else if(cond.bronze) newMedalTier=1; if (newMedalTier > oldMedalTier) { let reward = 0; if (newMedalTier >= 1 && oldMedalTier < 1) reward += challenge.rewards.bronze; if (newMedalTier >= 2 && oldMedalTier < 2) reward += challenge.rewards.silver; if (newMedalTier >= 3 && oldMedalTier < 3) reward += challenge.rewards.gold; let bonus = 0; if (Math.random() < 0.15) { bonus = Math.floor(reward * 0.5); } progress.medal = newMedalTier; showVictoryModal(challenge, newMedalTier, reward, bonus); } else { /* Peut-être une logique pour rejouer sans nouvelle médaille */ } }
+        function startQuickPlay() { gameMode = 'quickplay'; document.getElementById('challenge-objective').classList.add('hidden'); levelSelect.value = 'intermediate'; startNewRound(); showScreen('game'); }
+        function startChallenge(id) { const challenge = ALL_CHALLENGES.find(c => c.id === id); if (!challenge) return; gameMode = 'campaign'; currentChallengeId = id; const o = document.getElementById('challenge-objective'); o.textContent = `Objectif: ${challenge.objective}`; o.classList.remove('hidden'); levelSelect.value = challenge.difficulty; startNewRound(challenge.preset); showScreen('game'); }
+        function endGame(winnerInfo) { gameActive = false; if (winnerInfo.winner === 'X') { audioManager.play('win'); haptics.vibrate('success'); statusElement.textContent = `Vous avez gagné !`; winnerInfo.line.forEach(i => boardElement.children[i].classList.add('winning-cell')); if (gameMode === 'campaign') { handleCampaignVictory(winnerInfo); } } else { audioManager.play('lose'); haptics.vibrate('error'); statusElement.textContent = `Vous avez perdu !`; if(winnerInfo.line) winnerInfo.line.forEach(i => boardElement.children[i].classList.add('winning-cell')); } }
+        function handleCampaignVictory(winnerInfo) { const challenge = ALL_CHALLENGES.find(c => c.id === currentChallengeId); let progress = campaignProgress.find(p => p.id === currentChallengeId); const oldMedalTier = progress.medal; const cond = { bronze: challenge.medals.bronze.check(winnerInfo, playerMoveCount), silver: false, gold: false }; if (cond.bronze) cond.silver = challenge.medals.silver.check(winnerInfo, playerMoveCount, cond); if (cond.silver) cond.gold = challenge.medals.gold.check(winnerInfo, playerMoveCount, cond); let newMedalTier = 0; if(cond.gold) newMedalTier=3; else if(cond.silver) newMedalTier=2; else if(cond.bronze) newMedalTier=1; if (newMedalTier > oldMedalTier) { let reward = 0; if (newMedalTier >= 1 && oldMedalTier < 1) reward += challenge.rewards.bronze; if (newMedalTier >= 2 && oldMedalTier < 2) reward += challenge.rewards.silver; if (newMedalTier >= 3 && oldMedalTier < 3) reward += challenge.rewards.gold; let bonus = 0; if (Math.random() < 0.15) { bonus = Math.floor(reward * 0.5); } progress.medal = newMedalTier; showVictoryModal(challenge, newMedalTier, reward, bonus); } }
         function showVictoryModal(c, tier, reward, bonus) { document.getElementById('victory-title').textContent = c.title + " - Réussi !"; document.getElementById('victory-medals').innerHTML = getMedalHTML(tier); document.getElementById('victory-reward').textContent = reward; const bonusText = document.getElementById('victory-bonus-text'); if (bonus > 0) { document.getElementById('victory-bonus').textContent = bonus; bonusText.classList.remove('hidden'); } else { bonusText.classList.add('hidden'); } const nextChallenge = ALL_CHALLENGES.find(ch => ch.id === c.id + 1); let isNextUnlocked = false; if (nextChallenge) { const nextProgress = campaignProgress.find(p=>p.id === nextChallenge.id); isNextUnlocked = !nextProgress || nextProgress.unlocked; } document.getElementById('next-challenge-btn').classList.toggle('hidden', !nextChallenge || !isNextUnlocked); setTimeout(() => { openModal(victoryModal); animateCurrencyGain(reward + bonus, document.getElementById('victory-reward')); }, 1200); }
-        function createVictoryParticles(line) { const container = document.getElementById('board-container'); for(let i = 0; i < 20; i++) { const p = document.createElement('div'); p.className = 'particle'; const centerIndex = line[1]; const cell = boardElement.children[centerIndex]; const cellRect = cell.getBoundingClientRect(); const containerRect = container.getBoundingClientRect(); const startX = cellRect.left + cellRect.width / 2 - containerRect.left; const startY = cellRect.top + cellRect.height / 2 - containerRect.top; const angle = Math.random() * 2 * Math.PI; const radius = 50 + Math.random() * 100; const endX = startX + Math.cos(angle) * radius; const endY = startY + Math.sin(angle) * radius; const size = Math.random() * 5 + 2; p.style.left = `${startX}px`; p.style.top = `${startY}px`; p.style.width = `${size}px`; p.style.height = `${size}px`; p.style.setProperty('--transform-end', `translate(${endX - startX}px, ${endY - startY}px)`); container.appendChild(p); setTimeout(() => p.remove(), 1000); } }
-        function animateCurrencyGain(amount, originElement) { if (amount <= 0) return; const originRect = originElement.getBoundingClientRect(); const targetRect = currencyDisplay.getBoundingClientRect(); for (let i = 0; i < Math.min(amount / 5, 15); i++) { setTimeout(() => { const flyer = document.createElement('div'); flyer.className = 'currency-flyer'; flyer.textContent = '✨'; flyer.style.left = `${originRect.left + (Math.random() * originRect.width)}px`; flyer.style.top = `${originRect.top + (Math.random() * originRect.height)}px`; document.body.appendChild(flyer); audioManager.play('coin'); setTimeout(() => { flyer.style.transform = `translate(${targetRect.right - parseFloat(flyer.style.left) - 20}px, ${targetRect.top - parseFloat(flyer.style.top)}px) scale(0.5)`; flyer.style.opacity = '0'; }, 50); setTimeout(() => flyer.remove(), 1050); }, i * 50); } setTimeout(() => { currency += amount; saveData(); updateCurrencyDisplay(true); }, 1100); }
-        const winningConditions = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]; function createBoardCells(){if(boardElement.children.length>0)return;for(let i=0;i<9;i++){const c=document.createElement('div');c.classList.add('cell');c.dataset.index=i;boardElement.appendChild(c);}} function handleBoardClick(e){const c=e.target.closest('.cell');if(!c||!gameActive||currentPlayer!=='X'||board[parseInt(c.dataset.index)])return;runPlayerTurn(parseInt(c.dataset.index));} function runPlayerTurn(i){placePiece(i,'X');const w=checkWinner();if(w){endGame(w);return;}removeOldestPieceIfNeeded();switchPlayer();if (gameActive) setTimeout(computerMove,500);} function computerMove(){if(!gameActive)return;let m;const d=levelSelect.value;if(d==='easy')m=getEasyMove();else if(d==='intermediate')m=getIntermediateMove();else m=getHardMove();if(m!==-1){placePiece(m,'O');const w=checkWinner();if(w){endGame(w);return;}removeOldestPieceIfNeeded();}else{gameActive=false;statusElement.textContent='Égalité !';}switchPlayer();} function placePiece(i,p){board[i]=p;moveHistory.push(i);fullMoveHistory.push({index:i,player:p});if(p==='X'){playerMoveCount.X++;if(firstPlayerMoveIndex===-1)firstPlayerMoveIndex=i;}else playerMoveCount.O++;audioManager.play('place'); haptics.vibrate('light'); const c=boardElement.children[i];c.innerHTML='';const pion=document.createElement('span');pion.className='pion placed';pion.textContent=p;c.appendChild(pion);c.classList.add(p.toLowerCase());setTimeout(()=>pion.classList.remove('placed'),400);updateGhostPiece();} function removeOldestPieceIfNeeded(){if(moveHistory.length>6){const o=moveHistory.shift();board[o]=null;const c=boardElement.children[o];const p=c.querySelector('.pion');if(p){p.classList.add('removed');setTimeout(()=>{c.innerHTML='';c.className='cell';},300);}}updateGhostPiece();} function checkWinner(){for(const l of winningConditions){const[a,b,c]=l;if(board[a]&&board[a]===board[b]&&board[a]===board[c])return{winner:board[a],line:l};}if(!board.includes(null) && moveHistory.length < 6) return {winner:'tie',line:null}; return null;} function startNewRound(preset = null){board=Array(9).fill(null);moveHistory=[];fullMoveHistory=[];playerMoveCount={X:0,O:0};firstPlayerMoveIndex=-1;currentPlayer='X';gameActive=true;Array.from(boardElement.children).forEach(c=>{c.innerHTML='';c.className='cell';});if(preset){preset.board.forEach((p,i)=>{if(p)placePiece(i,p);});currentPlayer=preset.turn;}updateStatus();updateGhostPiece(true);} function updateGhostPiece(c=false){document.querySelectorAll('.cell.ghost').forEach(e=>e.classList.remove('ghost'));if(!c&&moveHistory.length>=6){const o=moveHistory[0];if(boardElement.children[o])boardElement.children[o].classList.add('ghost');}} function switchPlayer(){if(!gameActive)return;currentPlayer=(currentPlayer==='X'?'O':'X');updateStatus();} function updateStatus(){statusElement.textContent=gameActive?`Au tour de ${currentPlayer}`:'';statusElement.style.color=currentPlayer==='X'?'var(--x-color)':'var(--o-color)';} function getEasyMove(){let a=board.map((c,i)=>c===null?i:null).filter(v=>v!==null);return a.length?a[Math.floor(Math.random()*a.length)]:-1;} function getIntermediateMove(){for(let p of['O','X']){for(let i=0;i<9;i++){if(!board[i]){board[i]=p;if(checkWinner()){board[i]=null;return i;}board[i]=null;}}}return getEasyMove();} function getHardMove(){return minimax(board,'O').index;} function minimax(b,p){let a=b.map((c,i)=>c===null?i:null).filter(v=>v!==null);let w=checkWinnerForBoard(b);if(w)return{score:w.winner==='O'?10:-10};if(a.length===0)return{score:0};let m=[];for(let i of a){let o={index:i};b[i]=p;o.score=minimax(b,p==='O'?'X':'O').score;b[i]=null;m.push(o);}let bm;if(p==='O'){let bs=-Infinity;for(let o of m){if(o.score>bs){bs=o.score;bm=o;}}}else{let bs=Infinity;for(let o of m){if(o.score<bs){bs=o.score;bm=o;}}}return bm;} function checkWinnerForBoard(b){for(const l of winningConditions){const[x,y,z]=l;if(b[x]&&b[x]===b[y]&&b[x]===b[z])return{winner:b[x]};}return null;}
+        function animateCurrencyGain(amount, originElement) { if (amount <= 0) return; /* L'animation de gain de monnaie a été simplifiée pour ce design. */ setTimeout(() => { currency += amount; saveData(); updateCurrencyDisplay(true); audioManager.play('coin'); }, 300); }
+        const winningConditions = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]; function createBoardCells(){if(boardElement.children.length>0)return;for(let i=0;i<9;i++){const c=document.createElement('div');c.classList.add('cell');c.dataset.index=i;boardElement.appendChild(c);}} function handleBoardClick(e){const c=e.target.closest('.cell');if(!c||!gameActive||currentPlayer!=='X'||board[parseInt(c.dataset.index)])return;runPlayerTurn(parseInt(c.dataset.index));} function runPlayerTurn(i){placePiece(i,'X');const w=checkWinner();if(w){endGame(w);return;}removeOldestPieceIfNeeded();switchPlayer();if (gameActive) setTimeout(computerMove,500);} function computerMove(){if(!gameActive)return;let m;const d=levelSelect.value;if(d==='easy')m=getEasyMove();else if(d==='intermediate')m=getIntermediateMove();else m=getHardMove();if(m!==-1){placePiece(m,'O');const w=checkWinner();if(w){endGame(w);return;}removeOldestPieceIfNeeded();}else{gameActive=false;statusElement.textContent='Égalité !';}switchPlayer();} function placePiece(i,p){board[i]=p;moveHistory.push(i);fullMoveHistory.push({index:i,player:p});if(p==='X'){playerMoveCount.X++;if(firstPlayerMoveIndex===-1)firstPlayerMoveIndex=i;}else playerMoveCount.O++;audioManager.play('place'); haptics.vibrate('light'); const c=boardElement.children[i];c.innerHTML='';const pion=document.createElement('span');pion.className='pion placed';pion.textContent=p;c.appendChild(pion);c.classList.add(p.toLowerCase());setTimeout(()=>pion.classList.remove('placed'),500);updateGhostPiece();} function removeOldestPieceIfNeeded(){if(moveHistory.length>6){const o=moveHistory.shift();board[o]=null;const c=boardElement.children[o];const p=c.querySelector('.pion');if(p){p.classList.add('removed');setTimeout(()=>{c.innerHTML='';c.className='cell';},300);}}updateGhostPiece();} function checkWinner(){for(const l of winningConditions){const[a,b,c]=l;if(board[a]&&board[a]===board[b]&&board[a]===board[c])return{winner:board[a],line:l};}if(!board.includes(null) && moveHistory.length < 6) return {winner:'tie',line:null}; return null;} function startNewRound(preset = null){board=Array(9).fill(null);moveHistory=[];fullMoveHistory=[];playerMoveCount={X:0,O:0};firstPlayerMoveIndex=-1;currentPlayer='X';gameActive=true;Array.from(boardElement.children).forEach(c=>{c.innerHTML='';c.className='cell';});if(preset){preset.board.forEach((p,i)=>{if(p)placePiece(i,p);});currentPlayer=preset.turn;}updateStatus();updateGhostPiece(true);} function updateGhostPiece(c=false){document.querySelectorAll('.cell.ghost').forEach(e=>e.classList.remove('ghost'));if(!c&&moveHistory.length>=6){const o=moveHistory[0];if(boardElement.children[o])boardElement.children[o].classList.add('ghost');}} function switchPlayer(){if(!gameActive)return;currentPlayer=(currentPlayer==='X'?'O':'X');updateStatus();} function updateStatus(){statusElement.textContent=gameActive?`C'est à vous de jouer`:'';statusElement.style.color=currentPlayer==='X'?'var(--x-color)':'var(--o-color)'; if (currentPlayer === 'O' && gameActive) { statusElement.textContent = `L'IA réfléchit...`; statusElement.style.color = 'var(--text-light-color)'; }} function getEasyMove(){let a=board.map((c,i)=>c===null?i:null).filter(v=>v!==null);return a.length?a[Math.floor(Math.random()*a.length)]:-1;} function getIntermediateMove(){for(let p of['O','X']){for(let i=0;i<9;i++){if(!board[i]){board[i]=p;if(checkWinner()){board[i]=null;return i;}board[i]=null;}}}return getEasyMove();} function getHardMove(){return minimax(board,'O').index;} function minimax(b,p){let a=b.map((c,i)=>c===null?i:null).filter(v=>v!==null);let w=checkWinnerForBoard(b);if(w)return{score:w.winner==='O'?10:-10};if(a.length===0)return{score:0};let m=[];for(let i of a){let o={index:i};b[i]=p;o.score=minimax(b,p==='O'?'X':'O').score;b[i]=null;m.push(o);}let bm;if(p==='O'){let bs=-Infinity;for(let o of m){if(o.score>bs){bs=o.score;bm=o;}}}else{let bs=Infinity;for(let o of m){if(o.score<bs){bs=o.score;bm=o;}}}return bm;} function checkWinnerForBoard(b){for(const l of winningConditions){const[x,y,z]=l;if(b[x]&&b[x]===b[y]&&b[x]===b[z])return{winner:b[x]};}return null;}
         
         init();
     });
     
-    // OPTIMISATION 8 : Service Worker pour le mode hors-ligne
-    // Pour que cela fonctionne, vous devez créer un fichier `sw.js` à la racine de votre site.
+    // Service Worker pour le mode hors-ligne
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js').then(registration => {
