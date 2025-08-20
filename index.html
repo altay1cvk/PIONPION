@@ -2,11 +2,18 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <!-- Méta-données Viewport optimisées pour iOS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+
+    <!-- Méta-données PWA pour une expérience "Application" sur iOS -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="PIONPION">
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png"> <!-- Assurez-vous d'avoir cette icône -->
+    
+    <!-- Ajout du Manifest pour PWA (Android et standard) -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#10101a">
 
     <title>PIONPION - Projet: ASCENSION v2.0</title>
     <style>
@@ -16,24 +23,20 @@
             --accent-color: #ff3c5f; --border-color: rgba(0, 191, 255, 0.3);
             --bronze: #cd7f32; --silver: #c0c0c0; --gold: #ffd700;
             
-            --safe-area-inset-top: env(safe-area-inset-top, 20px);
-            --safe-area-inset-right: env(safe-area-inset-right, 20px);
-            --safe-area-inset-bottom: env(safe-area-inset-bottom, 20px); /* AJOUT */
-            --safe-area-inset-left: env(safe-area-inset-left, 20px);
+            /* Les variables pour les zones de sécurité restent utiles pour les éléments fixes */
+            --safe-area-inset-top: env(safe-area-inset-top, 0px);
+            --safe-area-inset-right: env(safe-area-inset-right, 0px);
+            --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+            --safe-area-inset-left: env(safe-area-inset-left, 0px);
         }
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Bebas+Neue&display=swap');
         
         * { 
             box-sizing: border-box; 
-            -webkit-user-select: none;
-            user-select: none;
+            -webkit-user-select: none; user-select: none;
             -webkit-tap-highlight-color: transparent;
         }
-
-        /* AJOUT : Amélioration de la gestion du texte sur iOS */
-        html, body {
-            -webkit-text-size-adjust: 100%;
-        }
+        html, body { -webkit-text-size-adjust: 100%; }
 
         body { 
             font-family: 'Poppins', sans-serif; 
@@ -41,76 +44,50 @@
             background-size: 400% 400%; 
             animation: gradientBG 15s ease infinite; 
             color: var(--text-color); 
-            height: calc(var(--vh, 1vh) * 100);
+            /* OPTIMISATION 1 : Utilisation de 100dvh (Dynamic Viewport Height) pour une hauteur parfaite sur mobile */
+            height: 100dvh;
             margin: 0; 
             overflow: hidden; 
-            display: grid; 
-            place-items: center; 
-            /* AJOUT : Utilisation des zones de sécurité pour le padding principal */
-            padding: 
-                calc(1rem + var(--safe-area-inset-top)) 
-                calc(1rem + var(--safe-area-inset-right)) 
-                calc(1rem + var(--safe-area-inset-bottom)) 
-                calc(1rem + var(--safe-area-inset-left));
+            /* OPTIMISATION 2 : Flexbox pour un centrage robuste et prévisible */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            /* Le padding global est géré par les conteneurs internes pour plus de contrôle */
+            padding: 1rem;
         }
         @keyframes gradientBG { 0% {background-position: 0% 50%;} 50% {background-position: 100% 50%;} 100% {background-position: 0% 50%;} }
         
-        #launch-screen {
-            display: grid; place-items: center; text-align: center; position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%; z-index: 10000;
-            transition: opacity 0.5s ease;
+        /* OPTIMISATION 3 : Organisation verticale claire pour l'écran de lancement */
+        #launch-screen > div {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
         }
-        #launch-screen.hidden { opacity: 0; pointer-events: none; }
         #launch-screen .logo {
             font-family: 'Bebas Neue', cursive; font-size: clamp(4em, 20vmin, 8em);
             text-shadow: 0 0 5px #fff, 0 0 10px var(--accent-color), 0 0 20px var(--accent-color);
         }
         #launch-btn { font-size: 1.5em; padding: 20px 40px; animation: pulse-glow 2s infinite; }
-
-        /* AJOUT : Style pour le nouveau bouton et ses instructions */
+        
         #add-to-home-btn {
-            font-size: 1em;
-            padding: 12px 24px;
-            background: transparent;
-            border: 1px solid var(--border-color);
-            margin-top: 20px;
+            font-size: 1em; padding: 12px 24px; background: transparent; border: 1px solid var(--border-color);
         }
-        #add-to-home-btn:hover {
-            transform: translateY(-2px) scale(1.02);
-            background-color: var(--cell-bg);
-        }
-        .share-icon {
-            display: inline-block;
-            width: 20px; height: 20px;
-            border: 2px solid var(--text-color);
-            border-radius: 4px;
-            position: relative;
-            margin: 0 5px;
-        }
-        .share-icon::before {
-            content: '';
-            position: absolute;
-            bottom: 6px; left: 7px;
-            width: 2px; height: 10px;
-            background: var(--text-color);
-        }
-        .share-icon::after {
-            content: '';
-            position: absolute;
-            bottom: 12px; left: 4px;
-            border-left: 3px solid transparent;
-            border-right: 3px solid transparent;
-            border-bottom: 5px solid var(--text-color);
-        }
+        #add-to-home-btn:hover { transform: translateY(-2px) scale(1.02); background-color: var(--cell-bg); }
+        .share-icon { display: inline-block; width: 20px; height: 20px; border: 2px solid var(--text-color); border-radius: 4px; position: relative; margin: 0 5px; vertical-align: middle; }
+        .share-icon::before { content: ''; position: absolute; bottom: 6px; left: 7px; width: 2px; height: 10px; background: var(--text-color); }
+        .share-icon::after { content: ''; position: absolute; bottom: 12px; left: 4px; border-left: 3px solid transparent; border-right: 3px solid transparent; border-bottom: 5px solid var(--text-color); }
 
-        @keyframes pulse-glow {
-            0% { box-shadow: 0 0 15px var(--border-color); }
-            50% { box-shadow: 0 0 30px var(--win-glow); }
-            100% { box-shadow: 0 0 15px var(--border-color); }
-        }
+        @keyframes pulse-glow { 0% { box-shadow: 0 0 15px var(--border-color); } 50% { box-shadow: 0 0 30px var(--win-glow); } 100% { box-shadow: 0 0 15px var(--border-color); } }
 
+        /* OPTIMISATION 4 : Gestion affinée des zones de sécurité UNIQUEMENT sur les éléments fixes */
         #exit-fullscreen-btn {
-            position: fixed; top: var(--safe-area-inset-top); left: var(--safe-area-inset-left); z-index: 9999;
+            position: fixed; 
+            top: max(15px, var(--safe-area-inset-top));
+            left: max(15px, var(--safe-area-inset-left));
+            z-index: 9999;
             width: 45px; height: 45px; background-color: var(--cell-bg); color: var(--text-color);
             border: 1px solid var(--border-color); border-radius: 50%; display: grid; place-items: center;
             font-size: 2.2em; line-height: 1; font-family: sans-serif; cursor: pointer;
@@ -118,53 +95,54 @@
         }
         #exit-fullscreen-btn:hover { background-color: var(--accent-color); transform: scale(1.1) rotate(90deg); }
         #exit-fullscreen-btn.hidden { display: none; }
+        
+        .currency-display { 
+            position: fixed; 
+            top: max(15px, var(--safe-area-inset-top));
+            right: max(15px, var(--safe-area-inset-right));
+            background: var(--cell-bg); padding: 5px 15px; border-radius: 20px; 
+            border: 1px solid var(--border-color); z-index: 100; font-size: 1.2em; 
+            transition: transform 0.3s ease; 
+        }
 
+        /* OPTIMISATION 5 : Conteneur principal plus robuste */
         .screen { 
             width: 100%; max-width: 500px; background: var(--container-bg); border-radius: 25px; 
-            padding: clamp(1.5rem, 5vw, 2.5rem); border: 1px solid var(--border-color); 
+            padding: clamp(1rem, 4vw, 2rem); border: 1px solid var(--border-color); 
             box-shadow: 0 0 30px rgba(0, 191, 255, 0.15), inset 0 0 20px rgba(0, 0, 0, 0.5); 
-            -webkit-backdrop-filter: blur(12px);
-            backdrop-filter: blur(12px); 
+            -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); 
             text-align: center; transition: opacity 0.4s ease, transform 0.4s ease;
+            /* Empêche le contenu de déborder sur les petits écrans et active le scroll si besoin */
+            max-height: calc(100dvh - 2rem);
+            overflow-y: auto;
         }
         .screen.hidden { opacity: 0; transform: scale(0.95); pointer-events: none; display: block !important; position: absolute; }
         
-        h1, h2 { 
-            font-family: 'Bebas Neue', cursive; letter-spacing: 5px; margin: 0 0 20px 0; 
-            color: var(--text-color); text-shadow: 0 0 5px #fff, 0 0 8px var(--accent-color);
-        }
-        /* AMÉLIORATION : Taille légèrement réduite pour mieux s'adapter aux petits écrans */
+        h1, h2 { font-family: 'Bebas Neue', cursive; letter-spacing: 5px; margin: 0 0 20px 0; color: var(--text-color); text-shadow: 0 0 5px #fff, 0 0 8px var(--accent-color); }
         h1 { font-size: clamp(2.8em, 11vmin, 4.5em); } h2 { font-size: clamp(1.8em, 7vmin, 2.8em); }
         
         button { 
             font-family: 'Poppins', sans-serif; cursor: pointer; border: 1px solid var(--border-color); 
             background-color: var(--cell-bg); color: var(--text-color); border-radius: 10px; 
             transition: background-color 0.2s, box-shadow 0.2s, transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
-            padding: 15px 30px; font-size: 1.2em; margin: 10px; 
-            will-change: transform; 
-            position: relative; overflow: hidden; 
+            padding: 15px 30px; font-size: 1.2em; margin: 10px 0; /* Espacement vertical ajusté */
+            will-change: transform; position: relative; overflow: hidden; 
         }
-        button:hover { 
-            background-color: var(--border-color); box-shadow: 0 0 15px var(--border-color); 
-            transform: translateY(-4px) scale(1.02); 
-        }
+        button:hover { background-color: var(--border-color); box-shadow: 0 0 15px var(--border-color); transform: translateY(-4px) scale(1.02); }
         button:active { transform: scale(0.97) translateY(-2px); }
         button.disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; box-shadow: none !important; background-color: var(--cell-bg) !important; }
         
-        .currency-display { 
-            position: fixed; top: var(--safe-area-inset-top); right: var(--safe-area-inset-right);
-            background: var(--cell-bg); padding: 5px 15px; border-radius: 20px; 
-            border: 1px solid var(--border-color); z-index: 100; font-size: 1.2em; 
-            transition: transform 0.3s ease; 
-        }
         .currency-display.hidden { transform: translateY(-200%); }
         .currency-display.reward-pulse { animation: pulse 0.5s; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
-        
         .currency-flyer { position: fixed; z-index: 2000; color: var(--win-glow); transition: transform 1s cubic-bezier(0.5, -0.5, 1, 1), opacity 1s ease; will-change: transform, opacity; font-size: 1.5em; text-shadow: 0 0 10px var(--win-glow); }
+        
         #main-menu .logo { font-size: 5em; margin-bottom: 20px; }
-        #main-menu button { display: block; width: 80%; margin: 15px auto; }
-        #campaign-list { max-height: 60vh; overflow-y: auto; padding-right: 10px; }
+        #main-menu button { display: block; width: 90%; max-width: 350px; margin: 15px auto; }
+        
+        /* OPTIMISATION 6 : Scroll inertiel natif sur iOS */
+        #campaign-list { max-height: 55vh; overflow-y: auto; padding-right: 10px; -webkit-overflow-scrolling: touch; }
+        
         .phase-header { font-family: 'Bebas Neue'; font-size: 1.5em; letter-spacing: 3px; margin-top: 20px; margin-bottom: 10px; color: var(--o-color); border-bottom: 1px solid var(--o-color); padding-bottom: 5px; }
         .challenge-item { display: flex; flex-direction: column; background: var(--cell-bg); padding: 15px; border-radius: 10px; margin-bottom: 10px; cursor: pointer; transition: background-color 0.2s; text-align: left; }
         .challenge-item:not(.locked):hover { background-color: rgba(255,255,255,0.1); }
@@ -182,44 +160,26 @@
         
         #board-container { position: relative; }
         #board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 20px auto; width: clamp(270px, 80vmin, 350px); max-width: 100%; }
-        .cell { 
-            aspect-ratio: 1 / 1; background-color: var(--cell-bg); border-radius: 15px; 
-            border: 1px solid var(--border-color); display: grid; place-items: center; 
-            font-size: clamp(2.5em, 15vmin, 3.5em); font-weight: 600; cursor: pointer; 
-            transition: transform 0.2s ease;
-            will-change: transform; 
-        }
+        .cell { aspect-ratio: 1 / 1; background-color: var(--cell-bg); border-radius: 15px; border: 1px solid var(--border-color); display: grid; place-items: center; font-size: clamp(2.5em, 15vmin, 3.5em); font-weight: 600; cursor: pointer; transition: transform 0.2s ease; will-change: transform; }
         .cell:hover { transform: scale(1.05); border-color: var(--win-glow); }
-        
         .pion { transition: transform 0.3s, opacity 0.3s; will-change: transform, opacity; }
         .cell.x .pion { color: var(--x-color); text-shadow: 0 0 10px var(--x-color); }
         .cell.o .pion { color: var(--o-color); text-shadow: 0 0 10px var(--o-color); }
         .cell.ghost .pion { animation: ghost-pulse 2s infinite ease-in-out; opacity: 0.3; }
         @keyframes ghost-pulse { 50% { opacity: 0.5; transform: scale(0.95); } }
-        
         .pion.placed { animation: placePiece 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
         @keyframes placePiece { from { transform: scale(0) rotate(-180deg); opacity: 0; } to { transform: scale(1) rotate(0deg); opacity: 1; } }
-        
         .pion.removed { animation: removePiece 0.3s ease-in forwards; }
         @keyframes removePiece { to { opacity: 0; transform: scale(0); } }
-        
         .winning-cell { animation: highlightWin 1.5s infinite ease-in-out; border-color: var(--win-glow); }
         @keyframes highlightWin { 50% { transform: scale(1.05); box-shadow: 0 0 20px var(--win-glow); } }
-        
         .particle { position: absolute; background: var(--win-glow); border-radius: 50%; animation: fly-out 1s ease-out forwards; will-change: transform, opacity; box-shadow: 0 0 10px var(--win-glow); }
         @keyframes fly-out { to { transform: var(--transform-end); opacity: 0; } }
         
-        .modal { 
-            display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; 
-            background-color: rgba(0,0,0,0.8); align-items: center; justify-content: center; 
-            -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); 
-            animation: fadeInModal 0.3s ease; 
-        }
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); align-items: center; justify-content: center; -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); animation: fadeInModal 0.3s ease; }
         @keyframes fadeInModal { from { opacity: 0; } to { opacity: 1; } }
-        
         .modal-content { background: var(--container-bg); padding: 30px; border-radius: 15px; text-align: center; max-width: 400px; width: 90%; border: 1px solid var(--border-color); animation: modalOpen 0.5s cubic-bezier(0.165, 0.84, 0.44, 1); }
         @keyframes modalOpen { from { transform: translateY(50px) scale(0.9); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
-        
         #victory-bonus { color: var(--win-glow); font-weight: bold; animation: bonus-pulse 1s infinite; }
         @keyframes bonus-pulse { 50% { text-shadow: 0 0 15px var(--win-glow); } }
     </style>
@@ -230,8 +190,7 @@
         <div>
             <div class="logo">PIONPION</div>
             <button id="launch-btn">LANCER</button>
-            <!-- AJOUT : Bouton pour ajouter à l'écran d'accueil, caché par défaut -->
-            <button id="add-to-home-btn" class="hidden">Ajouter à l'accueil</button>
+            <button id="add-to-home-btn" class="hidden">Installer l'application</button>
         </div>
     </div>
 
@@ -275,132 +234,68 @@
         </div>
     </div>
     
-    <!-- AJOUT : Modale d'instructions pour l'ajout à l'écran d'accueil -->
     <div id="a2hs-instructions-modal" class="modal">
         <div class="modal-content">
             <h2>Installer l'application</h2>
-            <p>Pour une meilleure expérience, ajoutez PIONPION à votre écran d'accueil :</p>
+            <p>Pour la meilleure expérience, ajoutez PIONPION à votre écran d'accueil :</p>
             <p style="margin: 20px 0;">
-                Appuyez sur l'icône de Partage <span class="share-icon"></span> puis sélectionnez<br>
+                Appuyez sur <span class="share-icon"></span> puis sélectionnez<br>
                 <strong>"Sur l'écran d'accueil"</strong>.
             </p>
             <button id="close-a2hs-modal-btn">Compris !</button>
         </div>
     </div>
 
-
     <script>
-    const setRealViewportHeight = () => {
-        const vh = window.innerHeight * 0.01;
-        document.documentElement.style.setProperty('--vh', `${vh}px`);
-    };
-    window.addEventListener('resize', setRealViewportHeight);
-    setRealViewportHeight();
+    // Le hack pour la hauteur du viewport (vh) n'est plus nécessaire grâce à l'utilisation de `dvh` en CSS.
+    // const setRealViewportHeight = () => { ... };
+    // window.addEventListener('resize', setRealViewportHeight);
+    // setRealViewportHeight();
 
+    document.addEventListener('DOMContentLoaded', () => {
+        // Le reste de votre logique de jeu reste inchangé...
+        const audioManager = { /* ... */ };
+        // ... Tout le code de gameplay ...
+        // Collez ici l'intégralité de votre script de jeu original, SAUF le hack setRealViewportHeight
+    });
+    
+    // OPTIMISATION 7 : Enregistrement du Service Worker pour le mode hors-ligne et la mise en cache
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').then(registration => {
+          console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }, err => {
+          console.log('ServiceWorker registration failed: ', err);
+        });
+      });
+    }
+    </script>
+    <!-- Le reste du script de jeu va ici -->
+    <script>
     document.addEventListener('DOMContentLoaded', () => {
         const audioManager = {
             ctx: null, isUnlocked: false,
             init() { if (this.isUnlocked || typeof AudioContext === 'undefined') return; this.ctx = new (window.AudioContext || window.webkitAudioContext)(); this.isUnlocked = true; },
             play(type) { if (!this.isUnlocked) return; let osc = this.ctx.createOscillator(); let gain = this.ctx.createGain(); osc.connect(gain); gain.connect(this.ctx.destination); const now = this.ctx.currentTime; gain.gain.setValueAtTime(0.5, now); switch (type) { case 'click': osc.frequency.setValueAtTime(440, now); gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.1); break; case 'place': osc.frequency.setValueAtTime(261.63, now); gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.2); break; case 'win': osc.frequency.setValueAtTime(523.25, now); osc.frequency.linearRampToValueAtTime(1046.50, now + 0.3); gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.4); break; case 'lose': osc.frequency.setValueAtTime(220, now); osc.frequency.linearRampToValueAtTime(110, now + 0.4); gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.5); break; case 'coin': osc.frequency.setValueAtTime(880, now); gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.15); break; } osc.start(now); osc.stop(now + 0.5); }
         };
-        
-        // --- GESTION DU PLEIN ÉCRAN ---
-        const launchScreen = document.getElementById('launch-screen');
-        const launchBtn = document.getElementById('launch-btn');
-        const exitFullscreenBtn = document.getElementById('exit-fullscreen-btn');
-        const docElem = document.documentElement;
-        
-        function openFullscreen() {
-            if (docElem.requestFullscreen) { docElem.requestFullscreen().catch(err => console.log(err)); } 
-            else if (docElem.webkitRequestFullscreen) { docElem.webkitRequestFullscreen().catch(err => console.log(err)); }
-        }
-
-        function closeFullscreen() {
-            if (document.exitFullscreen) { document.exitFullscreen(); } 
-            else if (document.webkitExitFullscreen) { document.webkitExitFullscreen(); }
-        }
-        
-        function checkFullscreenStatus() {
-            const isFullscreen = document.fullscreenElement || document.webkitFullscreenElement;
-            exitFullscreenBtn.classList.toggle('hidden', !isFullscreen);
-        }
-
-        // --- DOM ELEMENTS ---
-        const screens = { mainMenu: document.getElementById('main-menu'), campaign: document.getElementById('campaign-screen'), game: document.getElementById('game-wrapper') };
-        const boardElement = document.getElementById('board'), statusElement = document.getElementById('status'), levelSelect = document.getElementById('level'), resetBtn = document.getElementById('reset-btn'), currencyAmount = document.getElementById('currency-amount'), victoryModal = document.getElementById('victory-modal'), currencyDisplay = document.getElementById('currency-display');
-        
-        /* AJOUT : Éléments pour la modale "Ajouter à l'écran d'accueil" */
-        const addToHomeBtn = document.getElementById('add-to-home-btn');
-        const a2hsModal = document.getElementById('a2hs-instructions-modal');
-        const closeA2hsModalBtn = document.getElementById('close-a2hs-modal-btn');
-        
+        const launchScreen = document.getElementById('launch-screen'); const launchBtn = document.getElementById('launch-btn'); const exitFullscreenBtn = document.getElementById('exit-fullscreen-btn'); const docElem = document.documentElement;
+        function openFullscreen() { if (docElem.requestFullscreen) { docElem.requestFullscreen().catch(err => console.log(err)); } else if (docElem.webkitRequestFullscreen) { docElem.webkitRequestFullscreen().catch(err => console.log(err)); } }
+        function closeFullscreen() { if (document.exitFullscreen) { document.exitFullscreen(); } else if (document.webkitExitFullscreen) { document.webkitExitFullscreen(); } }
+        function checkFullscreenStatus() { const isFullscreen = document.fullscreenElement || document.webkitFullscreenElement; exitFullscreenBtn.classList.toggle('hidden', !isFullscreen); }
+        const screens = { mainMenu: document.getElementById('main-menu'), campaign: document.getElementById('campaign-screen'), game: document.getElementById('game-wrapper') }; const boardElement = document.getElementById('board'), statusElement = document.getElementById('status'), levelSelect = document.getElementById('level'), resetBtn = document.getElementById('reset-btn'), currencyAmount = document.getElementById('currency-amount'), victoryModal = document.getElementById('victory-modal'), currencyDisplay = document.getElementById('currency-display'); const addToHomeBtn = document.getElementById('add-to-home-btn'); const a2hsModal = document.getElementById('a2hs-instructions-modal'); const closeA2hsModalBtn = document.getElementById('close-a2hs-modal-btn');
         let currentScreen = 'launch';
-        
-        // --- GAME STATE ---
-        let gameMode, currentChallengeId, currency, campaignProgress, board, moveHistory, fullMoveHistory, playerMoveCount, firstPlayerMoveIndex, currentPlayer, gameActive;
-        const ALL_CHALLENGES = [{id:1,phase:1,title:"Initiation",objective:"Gagnez contre l'IA Facile.",difficulty:'easy',medals:{bronze:{check:w=>w.winner==='X',desc:"Gagner la partie."},silver:{check:(w,p)=>p.X<=4,desc:"Gagner en 4 coups ou moins."},gold:{check:(w,p)=>p.X<=3,desc:"Gagner en 3 coups."}},rewards:{bronze:10,silver:5,gold:10}},{id:2,phase:1,title:"Ligne de Force",objective:"Gagnez avec une ligne verticale.",difficulty:'easy',medals:{bronze:{check:w=>[[0,3,6],[1,4,7],[2,5,8]].some(l=>l.every(i=>w.line.includes(i))),desc:"Gagner avec une colonne."},silver:{check:(w,p,c)=>c.bronze&&p.X<=4,desc:"Et en 4 coups ou moins."},gold:{check:(w,p,c)=>c.silver&&!moveHistory.includes(firstPlayerMoveIndex),desc:"Et sans que votre 1er pion soit retiré."}},rewards:{bronze:15,silver:10,gold:15}},{id:3,phase:1,title:"Maître du Centre",objective:"Gagnez en utilisant la case centrale.",difficulty:'intermediate',medals:{bronze:{check:w=>w.line.includes(4),desc:"Gagner avec la case centrale."},silver:{check:(w,p,c)=>c.bronze&&!fullMoveHistory.some(m=>m.index===4&&m.player==='O'),desc:"Et sans que l'IA ne joue au centre."},gold:{check:(w,p,c)=>c.silver&&levelSelect.value==='intermediate',desc:"Et en difficulté Intermédiaire."}},rewards:{bronze:15,silver:15,gold:20}},{id:4,phase:2,title:"Intouchable",objective:"Gagnez sans que votre 1er pion soit retiré.",difficulty:'intermediate',medals:{bronze:{check:w=>moveHistory.includes(firstPlayerMoveIndex),desc:"Votre 1er pion est toujours sur le plateau."},silver:{check:(w,p,c)=>c.bronze&&p.X<=4,desc:"Et gagner en 4 coups ou moins."},gold:{check:(w,p,c)=>c.silver&&levelSelect.value==='intermediate',desc:"Et en difficulté Intermédiaire."}},rewards:{bronze:20,silver:15,gold:25}},{id:5,phase:2,title:"Efficacité Redoutable",objective:"Gagnez en 3 coups exactement.",difficulty:'intermediate',medals:{bronze:{check:(w,p)=>p.X===3,desc:"Gagner en 3 coups."},silver:{check:(w,p,c)=>c.bronze&&w.line.includes(4),desc:"Et en utilisant la case centrale."},gold:{check:(w,p,c)=>c.silver&&levelSelect.value==='hard',desc:"Et en difficulté Difficile."}},rewards:{bronze:25,silver:25,gold:50}},{id:6,phase:2,title:"Le Puzzle du Coin",objective:"L'IA a mal joué. Gagnez au prochain coup.",difficulty:'easy',preset:{board:['O',null,null,null,'X',null,null,null,'O'],turn:'X'},medals:{bronze:{check:(w,p)=>p.X===1,desc:"Gagner en un seul coup."},silver:{check:(w,p,c)=>c.bronze,desc:" "},gold:{check:(w,p,c)=>c.bronze,desc:" "}},rewards:{bronze:30,silver:0,gold:0}},{id:7,phase:3,title:"Le Grand Test",objective:"Gagnez contre l'IA en Difficile.",difficulty:'hard',medals:{bronze:{check:w=>levelSelect.value==='hard',desc:"Gagner contre l'IA Difficile."},silver:{check:(w,p,c)=>c.bronze&&p.X<=5,desc:"Et en 5 coups ou moins."},gold:{check:(w,p,c)=>c.silver&&moveHistory.includes(firstPlayerMoveIndex),desc:"Et sans que votre 1er pion soit retiré."}},rewards:{bronze:50,silver:50,gold:100}}];
-
-        // --- INITIALIZATION ---
+        let gameMode, currentChallengeId, currency, campaignProgress, board, moveHistory, fullMoveHistory, playerMoveCount, firstPlayerMoveIndex, currentPlayer, gameActive; const ALL_CHALLENGES = [{id:1,phase:1,title:"Initiation",objective:"Gagnez contre l'IA Facile.",difficulty:'easy',medals:{bronze:{check:w=>w.winner==='X',desc:"Gagner la partie."},silver:{check:(w,p)=>p.X<=4,desc:"Gagner en 4 coups ou moins."},gold:{check:(w,p)=>p.X<=3,desc:"Gagner en 3 coups."}},rewards:{bronze:10,silver:5,gold:10}},{id:2,phase:1,title:"Ligne de Force",objective:"Gagnez avec une ligne verticale.",difficulty:'easy',medals:{bronze:{check:w=>[[0,3,6],[1,4,7],[2,5,8]].some(l=>l.every(i=>w.line.includes(i))),desc:"Gagner avec une colonne."},silver:{check:(w,p,c)=>c.bronze&&p.X<=4,desc:"Et en 4 coups ou moins."},gold:{check:(w,p,c)=>c.silver&&!moveHistory.includes(firstPlayerMoveIndex),desc:"Et sans que votre 1er pion soit retiré."}},rewards:{bronze:15,silver:10,gold:15}},{id:3,phase:1,title:"Maître du Centre",objective:"Gagnez en utilisant la case centrale.",difficulty:'intermediate',medals:{bronze:{check:w=>w.line.includes(4),desc:"Gagner avec la case centrale."},silver:{check:(w,p,c)=>c.bronze&&!fullMoveHistory.some(m=>m.index===4&&m.player==='O'),desc:"Et sans que l'IA ne joue au centre."},gold:{check:(w,p,c)=>c.silver&&levelSelect.value==='intermediate',desc:"Et en difficulté Intermédiaire."}},rewards:{bronze:15,silver:15,gold:20}},{id:4,phase:2,title:"Intouchable",objective:"Gagnez sans que votre 1er pion soit retiré.",difficulty:'intermediate',medals:{bronze:{check:w=>moveHistory.includes(firstPlayerMoveIndex),desc:"Votre 1er pion est toujours sur le plateau."},silver:{check:(w,p,c)=>c.bronze&&p.X<=4,desc:"Et gagner en 4 coups ou moins."},gold:{check:(w,p,c)=>c.silver&&levelSelect.value==='intermediate',desc:"Et en difficulté Intermédiaire."}},rewards:{bronze:20,silver:15,gold:25}},{id:5,phase:2,title:"Efficacité Redoutable",objective:"Gagnez en 3 coups exactement.",difficulty:'intermediate',medals:{bronze:{check:(w,p)=>p.X===3,desc:"Gagner en 3 coups."},silver:{check:(w,p,c)=>c.bronze&&w.line.includes(4),desc:"Et en utilisant la case centrale."},gold:{check:(w,p,c)=>c.silver&&levelSelect.value==='hard',desc:"Et en difficulté Difficile."}},rewards:{bronze:25,silver:25,gold:50}},{id:6,phase:2,title:"Le Puzzle du Coin",objective:"L'IA a mal joué. Gagnez au prochain coup.",difficulty:'easy',preset:{board:['O',null,null,null,'X',null,null,null,'O'],turn:'X'},medals:{bronze:{check:(w,p)=>p.X===1,desc:"Gagner en un seul coup."},silver:{check:(w,p,c)=>c.bronze,desc:" "},gold:{check:(w,p,c)=>c.bronze,desc:" "}},rewards:{bronze:30,silver:0,gold:0}},{id:7,phase:3,title:"Le Grand Test",objective:"Gagnez contre l'IA en Difficile.",difficulty:'hard',medals:{bronze:{check:w=>levelSelect.value==='hard',desc:"Gagner contre l'IA Difficile."},silver:{check:(w,p,c)=>c.bronze&&p.X<=5,desc:"Et en 5 coups ou moins."},gold:{check:(w,p,c)=>c.silver&&moveHistory.includes(firstPlayerMoveIndex),desc:"Et sans que votre 1er pion soit retiré."}},rewards:{bronze:50,silver:50,gold:100}}];
         function init() {
-            loadData();
-            createBoardCells();
-            
-            /* AJOUT : Vérifie si on est sur iOS et si le jeu n'est pas déjà en mode "standalone" */
+            loadData(); createBoardCells();
             const isIos = () => /iPhone|iPad|iPod/.test(navigator.userAgent);
-            if (isIos() && !window.navigator.standalone) {
-                addToHomeBtn.classList.remove('hidden');
-            }
-
-            launchBtn.addEventListener('click', () => {
-                openFullscreen();
-                audioManager.init();
-                launchScreen.classList.add('hidden');
-                setTimeout(() => {
-                    launchScreen.style.display = 'none';
-                    showScreen('mainMenu', true);
-                }, 500);
-            });
-            
-            /* AJOUT : Écouteurs d'événements pour la modale d'instructions */
-            addToHomeBtn.addEventListener('click', () => openModal(a2hsModal));
-            closeA2hsModalBtn.addEventListener('click', () => closeModal(a2hsModal));
-            
-
-            exitFullscreenBtn.addEventListener('click', closeFullscreen);
-            document.addEventListener('fullscreenchange', checkFullscreenStatus);
-            document.addEventListener('webkitfullscreenchange', checkFullscreenStatus);
-
-            boardElement.addEventListener('click', handleBoardClick);
-            document.querySelectorAll('button').forEach(b => b.addEventListener('click', () => audioManager.play('click')));
-            document.getElementById('start-campaign-btn').addEventListener('click', showCampaignScreen);
-            document.getElementById('start-quickplay-btn').addEventListener('click', startQuickPlay);
-            document.querySelectorAll('.back-to-menu').forEach(b => b.addEventListener('click', () => showScreen('mainMenu')));
-            document.querySelectorAll('.back-btn').forEach(b => b.addEventListener('click', () => gameMode === 'campaign' ? showCampaignScreen() : showScreen('mainMenu')));
-            document.querySelector('.back-to-campaign').addEventListener('click', ()=>{closeModal(victoryModal); showCampaignScreen();});
-            document.getElementById('next-challenge-btn').addEventListener('click', ()=>{closeModal(victoryModal); startChallenge(currentChallengeId+1);});
-            resetBtn.addEventListener('click', () => gameMode === 'campaign' ? startChallenge(currentChallengeId) : startQuickPlay());
+            const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
+            if (isIos() && !isInStandaloneMode()) { addToHomeBtn.classList.remove('hidden'); }
+            launchBtn.addEventListener('click', () => { if(!isInStandaloneMode()) openFullscreen(); audioManager.init(); launchScreen.classList.add('hidden'); setTimeout(() => { launchScreen.style.display = 'none'; showScreen('mainMenu', true); }, 500); });
+            addToHomeBtn.addEventListener('click', () => openModal(a2hsModal)); closeA2hsModalBtn.addEventListener('click', () => closeModal(a2hsModal));
+            exitFullscreenBtn.addEventListener('click', closeFullscreen); document.addEventListener('fullscreenchange', checkFullscreenStatus); document.addEventListener('webkitfullscreenchange', checkFullscreenStatus);
+            boardElement.addEventListener('click', handleBoardClick); document.querySelectorAll('button').forEach(b => b.addEventListener('click', () => audioManager.play('click'))); document.getElementById('start-campaign-btn').addEventListener('click', showCampaignScreen); document.getElementById('start-quickplay-btn').addEventListener('click', startQuickPlay); document.querySelectorAll('.back-to-menu').forEach(b => b.addEventListener('click', () => showScreen('mainMenu'))); document.querySelectorAll('.back-btn').forEach(b => b.addEventListener('click', () => gameMode === 'campaign' ? showCampaignScreen() : showScreen('mainMenu'))); document.querySelector('.back-to-campaign').addEventListener('click', ()=>{closeModal(victoryModal); showCampaignScreen();}); document.getElementById('next-challenge-btn').addEventListener('click', ()=>{closeModal(victoryModal); startChallenge(currentChallengeId+1);}); resetBtn.addEventListener('click', () => gameMode === 'campaign' ? startChallenge(currentChallengeId) : startQuickPlay());
         }
-
-        function showScreen(screenName, isInitial = false) {
-            const oldScreen = screens[currentScreen];
-            if (oldScreen && !isInitial) {
-                oldScreen.classList.add('hidden');
-            }
-        
-            setTimeout(() => {
-                if (oldScreen && !isInitial) oldScreen.style.display = 'none';
-                Object.values(screens).forEach(s => s.style.display = 'none');
-                
-                const newScreen = screens[screenName];
-                newScreen.style.display = 'grid'; 
-                void newScreen.offsetWidth; 
-                newScreen.classList.remove('hidden');
-        
-                currentScreen = screenName;
-                currencyDisplay.classList.toggle('hidden', screenName !== 'campaign');
-            }, isInitial ? 10 : 400); 
-        }
-
+        function showScreen(screenName, isInitial = false) { const oldScreen = screens[currentScreen]; if (oldScreen && !isInitial) { oldScreen.classList.add('hidden'); } setTimeout(() => { if (oldScreen && !isInitial) oldScreen.style.display = 'none'; Object.values(screens).forEach(s => s.style.display = 'none'); const newScreen = screens[screenName]; newScreen.style.display = 'flex'; void newScreen.offsetWidth; newScreen.classList.remove('hidden'); currentScreen = screenName; currencyDisplay.classList.toggle('hidden', screenName !== 'campaign'); }, isInitial ? 10 : 400); }
         function openModal(modal) { modal.style.display = 'flex'; }
         function closeModal(modal) { modal.style.display = 'none'; }
         function showCampaignScreen() { const list = document.getElementById('campaign-list'); list.innerHTML = ''; let lastPhase = 0; ALL_CHALLENGES.forEach(challenge => { if (challenge.phase > lastPhase) { const header = document.createElement('div'); header.className = 'phase-header'; header.textContent = `PHASE ${challenge.phase}`; list.appendChild(header); lastPhase = challenge.phase; } let progress = campaignProgress.find(p => p.id === challenge.id); if (!progress) { progress = { id: challenge.id, unlocked: challenge.id === 1, medal: 0 }; campaignProgress.push(progress); } progress.unlocked = progress.id === 1 || (campaignProgress.find(p => p.id === challenge.id - 1)?.medal > 0); const item = document.createElement('div'); item.className = 'challenge-item'; if (!progress.unlocked) item.classList.add('locked'); item.innerHTML = ` <div class="challenge-header"> <div class="challenge-id">${challenge.id}</div> <div class="challenge-info"> <div>${challenge.title}</div> <small>${challenge.objective}</small> </div> <div class="challenge-medals-display">${getMedalHTML(progress.medal)}</div> </div> <div class="medal-objectives"> <div>🥉 ${challenge.medals.bronze.desc}</div> <div>🥈 ${challenge.medals.silver.desc}</div> <div>🥇 ${challenge.medals.gold.desc}</div> </div> `; if (progress.unlocked) item.addEventListener('click', () => startChallenge(challenge.id)); list.appendChild(item); }); showScreen('campaign'); }
@@ -416,7 +311,6 @@
         function createVictoryParticles(line) { const container = document.getElementById('board-container'); for(let i = 0; i < 20; i++) { const p = document.createElement('div'); p.className = 'particle'; const centerIndex = line[1]; const cell = boardElement.children[centerIndex]; const cellRect = cell.getBoundingClientRect(); const containerRect = container.getBoundingClientRect(); const startX = cellRect.left + cellRect.width / 2 - containerRect.left; const startY = cellRect.top + cellRect.height / 2 - containerRect.top; const angle = Math.random() * 2 * Math.PI; const radius = 50 + Math.random() * 100; const endX = startX + Math.cos(angle) * radius; const endY = startY + Math.sin(angle) * radius; const size = Math.random() * 5 + 2; p.style.left = `${startX}px`; p.style.top = `${startY}px`; p.style.width = `${size}px`; p.style.height = `${size}px`; p.style.setProperty('--transform-end', `translate(${endX - startX}px, ${endY - startY}px)`); container.appendChild(p); setTimeout(() => p.remove(), 1000); } }
         function animateCurrencyGain(amount, originElement) { if (amount <= 0) return; const originRect = originElement.getBoundingClientRect(); const targetRect = currencyDisplay.getBoundingClientRect(); for (let i = 0; i < Math.min(amount / 5, 15); i++) { setTimeout(() => { const flyer = document.createElement('div'); flyer.className = 'currency-flyer'; flyer.textContent = '✨'; flyer.style.left = `${originRect.left + (Math.random() * originRect.width)}px`; flyer.style.top = `${originRect.top + (Math.random() * originRect.height)}px`; document.body.appendChild(flyer); audioManager.play('coin'); setTimeout(() => { flyer.style.transform = `translate(${targetRect.left - parseFloat(flyer.style.left)}px, ${targetRect.top - parseFloat(flyer.style.top)}px) scale(0.5)`; flyer.style.opacity = '0'; }, 50); setTimeout(() => flyer.remove(), 1050); }, i * 50); } setTimeout(() => { currency += amount; saveData(); updateCurrencyDisplay(true); }, 1100); }
         const winningConditions = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]; function createBoardCells(){if(boardElement.children.length>0)return;for(let i=0;i<9;i++){const c=document.createElement('div');c.classList.add('cell');c.dataset.index=i;boardElement.appendChild(c);}} function handleBoardClick(e){const c=e.target.closest('.cell');if(!c||!gameActive||currentPlayer!=='X'||board[parseInt(c.dataset.index)])return;runPlayerTurn(parseInt(c.dataset.index));} function runPlayerTurn(i){placePiece(i,'X');const w=checkWinner();if(w){endGame(w);return;}removeOldestPieceIfNeeded();switchPlayer();if (gameActive) setTimeout(computerMove,500);} function computerMove(){if(!gameActive)return;let m;const d=levelSelect.value;if(d==='easy')m=getEasyMove();else if(d==='intermediate')m=getIntermediateMove();else m=getHardMove();if(m!==-1){placePiece(m,'O');const w=checkWinner();if(w){endGame(w);return;}removeOldestPieceIfNeeded();}else{gameActive=false;statusElement.textContent='Égalité !';}switchPlayer();} function placePiece(i,p){board[i]=p;moveHistory.push(i);fullMoveHistory.push({index:i,player:p});if(p==='X'){playerMoveCount.X++;if(firstPlayerMoveIndex===-1)firstPlayerMoveIndex=i;}else playerMoveCount.O++;audioManager.play('place');const c=boardElement.children[i];c.innerHTML='';const pion=document.createElement('span');pion.className='pion placed';pion.textContent=p;c.appendChild(pion);c.classList.add(p.toLowerCase());setTimeout(()=>pion.classList.remove('placed'),300);updateGhostPiece();} function removeOldestPieceIfNeeded(){if(moveHistory.length>6){const o=moveHistory.shift();board[o]=null;const c=boardElement.children[o];const p=c.querySelector('.pion');if(p){p.classList.add('removed');setTimeout(()=>{c.innerHTML='';c.className='cell';},300);}}updateGhostPiece();} function checkWinner(){for(const l of winningConditions){const[a,b,c]=l;if(board[a]&&board[a]===board[b]&&board[a]===board[c])return{winner:board[a],line:l};}if(!board.includes(null) && moveHistory.length < 6) return {winner:'tie',line:null}; return null;} function startNewRound(preset = null){board=Array(9).fill(null);moveHistory=[];fullMoveHistory=[];playerMoveCount={X:0,O:0};firstPlayerMoveIndex=-1;currentPlayer='X';gameActive=true;Array.from(boardElement.children).forEach(c=>{c.innerHTML='';c.className='cell';});if(preset){preset.board.forEach((p,i)=>{if(p)placePiece(i,p);});currentPlayer=preset.turn;}updateStatus();updateGhostPiece(true);} function updateGhostPiece(c=false){document.querySelectorAll('.cell.ghost').forEach(e=>e.classList.remove('ghost'));if(!c&&moveHistory.length>=6){const o=moveHistory[0];if(boardElement.children[o])boardElement.children[o].classList.add('ghost');}} function switchPlayer(){if(!gameActive)return;currentPlayer=(currentPlayer==='X'?'O':'X');updateStatus();} function updateStatus(){statusElement.textContent=gameActive?`Au tour de ${currentPlayer}`:'';statusElement.style.color=currentPlayer==='X'?'var(--x-color)':'var(--o-color)';} function getEasyMove(){let a=board.map((c,i)=>c===null?i:null).filter(v=>v!==null);return a.length?a[Math.floor(Math.random()*a.length)]:-1;} function getIntermediateMove(){for(let p of['O','X']){for(let i=0;i<9;i++){if(!board[i]){board[i]=p;if(checkWinner()){board[i]=null;return i;}board[i]=null;}}}return getEasyMove();} function getHardMove(){return minimax(board,'O').index;} function minimax(b,p){let a=b.map((c,i)=>c===null?i:null).filter(v=>v!==null);let w=checkWinnerForBoard(b);if(w)return{score:w.winner==='O'?10:-10};if(a.length===0)return{score:0};let m=[];for(let i of a){let o={index:i};b[i]=p;o.score=minimax(b,p==='O'?'X':'O').score;b[i]=null;m.push(o);}let bm;if(p==='O'){let bs=-Infinity;for(let o of m){if(o.score>bs){bs=o.score;bm=o;}}}else{let bs=Infinity;for(let o of m){if(o.score<bs){bs=o.score;bm=o;}}}return bm;} function checkWinnerForBoard(b){for(const l of winningConditions){const[x,y,z]=l;if(b[x]&&b[x]===b[y]&&b[x]===b[z])return{winner:b[x]};}return null;}
-
         init();
     });
     </script>
