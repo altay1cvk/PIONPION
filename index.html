@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PIONPION - Projet: ASCENSION v2.0</title>
+    <title>PIONPION - Projet: ASCENSION v2.0 (Optimisé)</title>
     <style>
         :root {
             --bg-color: #10101a; --container-bg: rgba(20, 20, 30, 0.8); --cell-bg: rgba(10, 10, 20, 0.6);
@@ -17,17 +17,19 @@
             box-sizing: border-box; 
             -webkit-user-select: none; /* Empêche la sélection de texte sur iOS */
             user-select: none;         /* Empêche la sélection de texte standard */
+            /* --- AMÉLIORATION iPHONE : Supprime le flash gris au toucher --- */
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* --- AMÉLIORATION : Correction du 100vh sur mobile --- */
+        /* --- Correction du 100vh sur mobile (déjà présent et correct) --- */
         body { 
             font-family: 'Poppins', sans-serif; 
             background: linear-gradient(-45deg, #10101a, #1a1a2e, #2a2a3a, #1a1a2e); 
             background-size: 400% 400%; 
             animation: gradientBG 15s ease infinite; 
             color: var(--text-color); 
-            height: 100vh; /* Fallback pour les anciens navigateurs */
-            height: calc(var(--vh, 1vh) * 100); /* Hauteur réelle de la fenêtre */
+            height: 100vh; /* Fallback */
+            height: calc(var(--vh, 1vh) * 100);
             margin: 0; 
             overflow: hidden; 
             display: grid; 
@@ -36,38 +38,23 @@
         }
         @keyframes gradientBG { 0% {background-position: 0% 50%;} 50% {background-position: 100% 50%;} 100% {background-position: 0% 50%;} }
         
-        /* --- AJOUT : Écran de lancement --- */
         #launch-screen {
-            display: grid;
-            place-items: center;
-            text-align: center;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 10000;
-            transition: opacity 0.5s ease;
+            display: grid; place-items: center; text-align: center;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 10000; transition: opacity 0.5s ease;
         }
-        #launch-screen.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
+        #launch-screen.hidden { opacity: 0; pointer-events: none; }
         #launch-screen .logo {
-            font-family: 'Bebas Neue', cursive;
-            font-size: clamp(4em, 20vmin, 8em);
+            font-family: 'Bebas Neue', cursive; font-size: clamp(4em, 20vmin, 8em);
             text-shadow: 0 0 5px #fff, 0 0 10px var(--accent-color), 0 0 20px var(--accent-color);
         }
-        #launch-btn {
-            font-size: 1.5em;
-            padding: 20px 40px;
-            animation: pulse-glow 2s infinite;
-        }
+        #launch-btn { font-size: 1.5em; padding: 20px 40px; animation: pulse-glow 2s infinite; }
         @keyframes pulse-glow {
             0% { box-shadow: 0 0 15px var(--border-color); }
             50% { box-shadow: 0 0 30px var(--win-glow); }
             100% { box-shadow: 0 0 15px var(--border-color); }
         }
 
-        /* --- AJOUT : Bouton de sortie du plein écran --- */
         #exit-fullscreen-btn {
             position: fixed; top: 20px; left: 20px; z-index: 9999;
             width: 45px; height: 45px;
@@ -77,28 +64,47 @@
             font-size: 2.2em; line-height: 1; font-family: sans-serif;
             cursor: pointer; transition: transform 0.3s, background-color 0.2s;
         }
-        #exit-fullscreen-btn:hover {
-            background-color: var(--accent-color);
-            transform: scale(1.1) rotate(90deg);
-        }
+        #exit-fullscreen-btn:hover { background-color: var(--accent-color); transform: scale(1.1) rotate(90deg); }
         #exit-fullscreen-btn.hidden { display: none; }
 
-        .screen { width: 100%; max-width: 500px; background: var(--container-bg); border-radius: 25px; padding: clamp(1.5rem, 5vw, 2.5rem); border: 1px solid var(--border-color); box-shadow: 0 0 50px rgba(0, 191, 255, 0.2), inset 0 0 20px rgba(0, 0, 0, 0.5); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); text-align: center; transition: opacity 0.4s ease, transform 0.4s ease; }
-        .screen.hidden { opacity: 0; transform: scale(0.95); pointer-events: none; display: block !important; position: absolute; }
+        .screen { 
+            width: 100%; max-width: 500px; background: var(--container-bg); border-radius: 25px; 
+            padding: clamp(1.5rem, 5vw, 2.5rem); border: 1px solid var(--border-color); 
+            box-shadow: 0 0 50px rgba(0, 191, 255, 0.2), inset 0 0 20px rgba(0, 0, 0, 0.5); 
+            -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); 
+            text-align: center; transition: opacity 0.4s ease, transform 0.4s ease; 
+            /* --- AMÉLIORATION iPHONE : Force l'accélération matérielle pour des transitions fluides --- */
+            backface-visibility: hidden;
+            transform: translateZ(0);
+        }
+        .screen.hidden { opacity: 0; transform: scale(0.95) translateZ(0); pointer-events: none; display: block !important; position: absolute; }
+        
         h1, h2 { font-family: 'Bebas Neue', cursive; letter-spacing: 5px; margin: 0 0 20px 0; color: var(--text-color); text-shadow: 0 0 5px #fff, 0 0 10px var(--accent-color), 0 0 20px var(--accent-color); }
         h1 { font-size: clamp(3em, 12vmin, 5em); } h2 { font-size: clamp(2em, 8vmin, 3em); }
-        button { font-family: 'Poppins', sans-serif; cursor: pointer; border: 1px solid var(--border-color); background-color: var(--cell-bg); color: var(--text-color); border-radius: 10px; transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); padding: 15px 30px; font-size: 1.2em; margin: 10px; will-change: transform; position: relative; overflow: hidden; }
-        button:hover { background-color: var(--border-color); box-shadow: 0 0 15px var(--border-color); transform: translateY(-4px) scale(1.02); }
-        button:active { transform: scale(0.97) translateY(-2px); }
+        
+        button { 
+            font-family: 'Poppins', sans-serif; cursor: pointer; border: 1px solid var(--border-color); 
+            background-color: var(--cell-bg); color: var(--text-color); border-radius: 10px; 
+            transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); padding: 15px 30px; 
+            font-size: 1.2em; margin: 10px; will-change: transform; position: relative; overflow: hidden;
+            /* --- AMÉLIORATION iPHONE : Force l'accélération matérielle --- */
+            backface-visibility: hidden;
+            transform: translateZ(0);
+        }
+        button:hover { background-color: var(--border-color); box-shadow: 0 0 15px var(--border-color); transform: translateY(-4px) scale(1.02) translateZ(0); }
+        button:active { transform: scale(0.97) translateY(-2px) translateZ(0); }
         button.disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; box-shadow: none !important; background-color: var(--cell-bg) !important; }
+
         .currency-display { position: fixed; top: 20px; right: 20px; background: var(--cell-bg); padding: 5px 15px; border-radius: 20px; border: 1px solid var(--border-color); z-index: 100; font-size: 1.2em; transition: transform 0.3s ease; }
         .currency-display.hidden { transform: translateY(-200%); }
         .currency-display.reward-pulse { animation: pulse 0.5s; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
         .currency-flyer { position: fixed; z-index: 2000; color: var(--win-glow); transition: transform 1s cubic-bezier(0.5, -0.5, 1, 1), opacity 1s ease; will-change: transform, opacity; font-size: 1.5em; text-shadow: 0 0 10px var(--win-glow); }
+        
         #main-menu .logo { font-size: 5em; margin-bottom: 20px; }
         #main-menu button { display: block; width: 80%; margin: 15px auto; }
         #campaign-list { max-height: 60vh; overflow-y: auto; padding-right: 10px; }
+        
         .phase-header { font-family: 'Bebas Neue'; font-size: 1.5em; letter-spacing: 3px; margin-top: 20px; margin-bottom: 10px; color: var(--o-color); border-bottom: 1px solid var(--o-color); padding-bottom: 5px; }
         .challenge-item { display: flex; flex-direction: column; background: var(--cell-bg); padding: 15px; border-radius: 10px; margin-bottom: 10px; cursor: pointer; transition: background-color 0.2s; text-align: left; }
         .challenge-item:not(.locked):hover { background-color: rgba(255,255,255,0.1); }
@@ -112,11 +118,21 @@
         .challenge-medals-display .medal.silver { color: var(--silver); opacity: 1; text-shadow: 0 0 5px var(--silver); }
         .challenge-medals-display .medal.gold { color: var(--gold); opacity: 1; text-shadow: 0 0 5px var(--gold); }
         .medal-objectives { font-size: 0.8em; margin-top: 10px; padding-left: 10px; border-left: 2px solid var(--border-color); opacity: 0.7; }
+        
         #challenge-objective { background: rgba(0,0,0,0.3); padding: 10px; border-radius: 10px; margin-bottom: 15px; font-size: 0.9em; border-left: 3px solid var(--win-glow); }
         #board-container { position: relative; }
         #board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 20px auto; width: clamp(270px, 80vmin, 350px); max-width: 100%; }
-        .cell { aspect-ratio: 1 / 1; background-color: var(--cell-bg); border-radius: 15px; border: 1px solid var(--border-color); display: grid; place-items: center; font-size: clamp(2.5em, 15vmin, 3.5em); font-weight: 600; cursor: pointer; transition: transform 0.2s ease, border-color 0.2s ease; will-change: transform, border-color; }
-        .cell:hover { transform: scale(1.05); border-color: var(--win-glow); }
+        
+        .cell { 
+            aspect-ratio: 1 / 1; background-color: var(--cell-bg); border-radius: 15px; 
+            border: 1px solid var(--border-color); display: grid; place-items: center; 
+            font-size: clamp(2.5em, 15vmin, 3.5em); font-weight: 600; cursor: pointer; 
+            transition: transform 0.2s ease, border-color 0.2s ease; will-change: transform, border-color;
+            /* --- AMÉLIORATION iPHONE : Force l'accélération matérielle --- */
+            backface-visibility: hidden;
+            transform: translateZ(0);
+        }
+        .cell:hover { transform: scale(1.05) translateZ(0); border-color: var(--win-glow); }
         .pion { transition: transform 0.3s, opacity 0.3s; will-change: transform, opacity; }
         .cell.x .pion { color: var(--x-color); text-shadow: 0 0 10px var(--x-color), 0 0 20px var(--x-color); }
         .cell.o .pion { color: var(--o-color); text-shadow: 0 0 10px var(--o-color), 0 0 20px var(--o-color); }
@@ -127,19 +143,27 @@
         .pion.removed { animation: removePiece 0.3s ease-in forwards; }
         @keyframes removePiece { to { opacity: 0; transform: scale(0); } }
         .winning-cell { animation: highlightWin 1.5s infinite ease-in-out; border-color: var(--win-glow); }
-        @keyframes highlightWin { 50% { transform: scale(1.05); box-shadow: 0 0 20px var(--win-glow); } }
+        @keyframes highlightWin { 50% { transform: scale(1.05) translateZ(0); box-shadow: 0 0 20px var(--win-glow); } }
+        
         .particle { position: absolute; background: var(--win-glow); border-radius: 50%; animation: fly-out 1s ease-out forwards; will-change: transform, opacity; box-shadow: 0 0 10px var(--win-glow); }
         @keyframes fly-out { to { transform: var(--transform-end); opacity: 0; } }
+        
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); align-items: center; justify-content: center; -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); animation: fadeInModal 0.3s ease; }
         @keyframes fadeInModal { from { opacity: 0; } to { opacity: 1; } }
-        .modal-content { background: var(--container-bg); padding: 30px; border-radius: 15px; text-align: center; max-width: 400px; border: 1px solid var(--border-color); animation: modalOpen 0.5s cubic-bezier(0.165, 0.84, 0.44, 1); }
-        @keyframes modalOpen { from { transform: translateY(50px) scale(0.9); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
+        .modal-content { 
+            background: var(--container-bg); padding: 30px; border-radius: 15px; 
+            text-align: center; max-width: 400px; border: 1px solid var(--border-color); 
+            animation: modalOpen 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+            /* --- AMÉLIORATION iPHONE : Force l'accélération matérielle --- */
+            backface-visibility: hidden;
+            transform: translateZ(0);
+        }
+        @keyframes modalOpen { from { transform: translateY(50px) scale(0.9) translateZ(0); opacity: 0; } to { transform: translateY(0) scale(1) translateZ(0); opacity: 1; } }
         #victory-bonus { color: var(--win-glow); font-weight: bold; animation: bonus-pulse 1s infinite; }
         @keyframes bonus-pulse { 50% { text-shadow: 0 0 15px var(--win-glow); } }
     </style>
 </head>
 <body>
-    <!-- AJOUT : Écran de lancement -->
     <div id="launch-screen">
         <div>
             <div class="logo">PIONPION</div>
@@ -147,12 +171,10 @@
         </div>
     </div>
 
-    <!-- AJOUT : Bouton de sortie du plein écran -->
     <div id="exit-fullscreen-btn" class="hidden">&times;</div>
 
     <div id="currency-display" class="hidden">✨ <span id="currency-amount">0</span></div>
     
-    <!-- MODIFICATION : Le menu principal est caché au départ -->
     <div id="main-menu" class="screen hidden">
         <div class="logo">PIONPION</div>
         <button id="start-campaign-btn">Projet: ASCENSION</button>
@@ -191,7 +213,7 @@
     </div>
 
     <script>
-    // --- AMÉLIORATION : Correction du 100vh sur mobile ---
+    // --- Correction du 100vh sur mobile (déjà présent et correct) ---
     const setRealViewportHeight = () => {
         const vh = window.innerHeight * 0.01;
         document.documentElement.style.setProperty('--vh', `${vh}px`);
@@ -200,82 +222,17 @@
     setRealViewportHeight();
 
     document.addEventListener('DOMContentLoaded', () => {
-        // --- AUDIO MANAGER ---
-        const audioManager = {
-            // ... (votre code audio manager existant, inchangé)
-            ctx: null, isUnlocked: false,
-            init() { if (this.isUnlocked || typeof AudioContext === 'undefined') return; this.ctx = new (window.AudioContext || window.webkitAudioContext)(); this.isUnlocked = true; },
-            play(type) { if (!this.isUnlocked) return; let osc = this.ctx.createOscillator(); let gain = this.ctx.createGain(); osc.connect(gain); gain.connect(this.ctx.destination); const now = this.ctx.currentTime; gain.gain.setValueAtTime(0.5, now); switch (type) { case 'click': osc.frequency.setValueAtTime(440, now); gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.1); break; case 'place': osc.frequency.setValueAtTime(261.63, now); gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.2); break; case 'win': osc.frequency.setValueAtTime(523.25, now); osc.frequency.linearRampToValueAtTime(1046.50, now + 0.3); gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.4); break; case 'lose': osc.frequency.setValueAtTime(220, now); osc.frequency.linearRampToValueAtTime(110, now + 0.4); gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.5); break; case 'coin': osc.frequency.setValueAtTime(880, now); gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.15); break; } osc.start(now); osc.stop(now + 0.5); }
-        };
-
-        // --- AJOUT : GESTION DU PLEIN ÉCRAN ---
-        const launchScreen = document.getElementById('launch-screen');
-        const launchBtn = document.getElementById('launch-btn');
-        const exitFullscreenBtn = document.getElementById('exit-fullscreen-btn');
-        const docElem = document.documentElement;
-
-        function openFullscreen() {
-            if (docElem.requestFullscreen) { docElem.requestFullscreen(); } 
-            else if (docElem.webkitRequestFullscreen) { /* Safari */ docElem.webkitRequestFullscreen(); }
-        }
-
-        function closeFullscreen() {
-            if (document.exitFullscreen) { document.exitFullscreen(); } 
-            else if (document.webkitExitFullscreen) { /* Safari */ document.webkitExitFullscreen(); }
-        }
-        
-        function checkFullscreenStatus() {
-            const isFullscreen = document.fullscreenElement || document.webkitFullscreenElement;
-            exitFullscreenBtn.classList.toggle('hidden', !isFullscreen);
-        }
-
-        // --- DOM ELEMENTS ---
-        const screens = { mainMenu: document.getElementById('main-menu'), campaign: document.getElementById('campaign-screen'), game: document.getElementById('game-wrapper') };
-        const boardElement = document.getElementById('board'), statusElement = document.getElementById('status'), levelSelect = document.getElementById('level'), resetBtn = document.getElementById('reset-btn'), currencyAmount = document.getElementById('currency-amount'), victoryModal = document.getElementById('victory-modal'), currencyDisplay = document.getElementById('currency-display');
-        let currentScreen = 'mainMenu'; // Sera affiché après le lancement
-        
-        // --- GAME STATE ---
+        // ... (Le début de votre JavaScript reste identique)
+        const audioManager = { ctx: null, isUnlocked: false, init() { if (this.isUnlocked || typeof AudioContext === 'undefined') return; this.ctx = new (window.AudioContext || window.webkitAudioContext)(); this.isUnlocked = true; }, play(type) { if (!this.isUnlocked) return; let osc = this.ctx.createOscillator(); let gain = this.ctx.createGain(); osc.connect(gain); gain.connect(this.ctx.destination); const now = this.ctx.currentTime; gain.gain.setValueAtTime(0.5, now); switch (type) { case 'click': osc.frequency.setValueAtTime(440, now); gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.1); break; case 'place': osc.frequency.setValueAtTime(261.63, now); gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.2); break; case 'win': osc.frequency.setValueAtTime(523.25, now); osc.frequency.linearRampToValueAtTime(1046.50, now + 0.3); gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.4); break; case 'lose': osc.frequency.setValueAtTime(220, now); osc.frequency.linearRampToValueAtTime(110, now + 0.4); gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.5); break; case 'coin': osc.frequency.setValueAtTime(880, now); gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.15); break; } osc.start(now); osc.stop(now + 0.5); } };
+        const launchScreen = document.getElementById('launch-screen'); const launchBtn = document.getElementById('launch-btn'); const exitFullscreenBtn = document.getElementById('exit-fullscreen-btn'); const docElem = document.documentElement;
+        function openFullscreen() { if (docElem.requestFullscreen) { docElem.requestFullscreen(); } else if (docElem.webkitRequestFullscreen) { docElem.webkitRequestFullscreen(); } }
+        function closeFullscreen() { if (document.exitFullscreen) { document.exitFullscreen(); } else if (document.webkitExitFullscreen) { document.webkitExitFullscreen(); } }
+        function checkFullscreenStatus() { const isFullscreen = document.fullscreenElement || document.webkitFullscreenElement; exitFullscreenBtn.classList.toggle('hidden', !isFullscreen); }
+        const screens = { mainMenu: document.getElementById('main-menu'), campaign: document.getElementById('campaign-screen'), game: document.getElementById('game-wrapper') }; const boardElement = document.getElementById('board'), statusElement = document.getElementById('status'), levelSelect = document.getElementById('level'), resetBtn = document.getElementById('reset-btn'), currencyAmount = document.getElementById('currency-amount'), victoryModal = document.getElementById('victory-modal'), currencyDisplay = document.getElementById('currency-display'); let currentScreen = 'mainMenu';
         let gameMode, currentChallengeId, currency, campaignProgress, board, moveHistory, fullMoveHistory, playerMoveCount, firstPlayerMoveIndex, currentPlayer, gameActive;
-        const ALL_CHALLENGES = [ /* ... Votre tableau de défis est long, je l'ai masqué ici pour la lisibilité, mais il est bien dans le code ... */ {id:1,phase:1,title:"Initiation",objective:"Gagnez contre l'IA Facile.",difficulty:'easy',medals:{bronze:{check:w=>w.winner==='X',desc:"Gagner la partie."},silver:{check:(w,p)=>p.X<=4,desc:"Gagner en 4 coups ou moins."},gold:{check:(w,p)=>p.X<=3,desc:"Gagner en 3 coups."}},rewards:{bronze:10,silver:5,gold:10}},{id:2,phase:1,title:"Ligne de Force",objective:"Gagnez avec une ligne verticale.",difficulty:'easy',medals:{bronze:{check:w=>[[0,3,6],[1,4,7],[2,5,8]].some(l=>l.every(i=>w.line.includes(i))),desc:"Gagner avec une colonne."},silver:{check:(w,p,c)=>c.bronze&&p.X<=4,desc:"Et en 4 coups ou moins."},gold:{check:(w,p,c)=>c.silver&&!moveHistory.includes(firstPlayerMoveIndex),desc:"Et sans que votre 1er pion soit retiré."}},rewards:{bronze:15,silver:10,gold:15}},{id:3,phase:1,title:"Maître du Centre",objective:"Gagnez en utilisant la case centrale.",difficulty:'intermediate',medals:{bronze:{check:w=>w.line.includes(4),desc:"Gagner avec la case centrale."},silver:{check:(w,p,c)=>c.bronze&&!fullMoveHistory.some(m=>m.index===4&&m.player==='O'),desc:"Et sans que l'IA ne joue au centre."},gold:{check:(w,p,c)=>c.silver&&levelSelect.value==='intermediate',desc:"Et en difficulté Intermédiaire."}},rewards:{bronze:15,silver:15,gold:20}},{id:4,phase:2,title:"Intouchable",objective:"Gagnez sans que votre 1er pion soit retiré.",difficulty:'intermediate',medals:{bronze:{check:w=>moveHistory.includes(firstPlayerMoveIndex),desc:"Votre 1er pion est toujours sur le plateau."},silver:{check:(w,p,c)=>c.bronze&&p.X<=4,desc:"Et gagner en 4 coups ou moins."},gold:{check:(w,p,c)=>c.silver&&levelSelect.value==='intermediate',desc:"Et en difficulté Intermédiaire."}},rewards:{bronze:20,silver:15,gold:25}},{id:5,phase:2,title:"Efficacité Redoutable",objective:"Gagnez en 3 coups exactement.",difficulty:'intermediate',medals:{bronze:{check:(w,p)=>p.X===3,desc:"Gagner en 3 coups."},silver:{check:(w,p,c)=>c.bronze&&w.line.includes(4),desc:"Et en utilisant la case centrale."},gold:{check:(w,p,c)=>c.silver&&levelSelect.value==='hard',desc:"Et en difficulté Difficile."}},rewards:{bronze:25,silver:25,gold:50}},{id:6,phase:2,title:"Le Puzzle du Coin",objective:"L'IA a mal joué. Gagnez au prochain coup.",difficulty:'easy',preset:{board:['O',null,null,null,'X',null,null,null,'O'],turn:'X'},medals:{bronze:{check:(w,p)=>p.X===1,desc:"Gagner en un seul coup."},silver:{check:(w,p,c)=>c.bronze,desc:" "},gold:{check:(w,p,c)=>c.bronze,desc:" "}},rewards:{bronze:30,silver:0,gold:0}},{id:7,phase:3,title:"Le Grand Test",objective:"Gagnez contre l'IA en Difficile.",difficulty:'hard',medals:{bronze:{check:w=>levelSelect.value==='hard',desc:"Gagner contre l'IA Difficile."},silver:{check:(w,p,c)=>c.bronze&&p.X<=5,desc:"Et en 5 coups ou moins."},gold:{check:(w,p,c)=>c.silver&&moveHistory.includes(firstPlayerMoveIndex),desc:"Et sans que votre 1er pion soit retiré."}},rewards:{bronze:50,silver:50,gold:100}}];
-
-        // --- INITIALIZATION ---
-        function init() {
-            loadData();
-            createBoardCells();
-            
-            // --- MODIFICATION : Écouteurs d'événements ---
-            // Le clic de lancement gère le plein écran et l'audio
-            launchBtn.addEventListener('click', () => {
-                openFullscreen();
-                audioManager.init();
-                launchScreen.classList.add('hidden');
-                showScreen('mainMenu', true); // Affiche le menu principal pour la première fois
-            });
-
-            exitFullscreenBtn.addEventListener('click', closeFullscreen);
-            document.addEventListener('fullscreenchange', checkFullscreenStatus);
-            document.addEventListener('webkitfullscreenchange', checkFullscreenStatus); // Pour Safari
-
-            boardElement.addEventListener('click', handleBoardClick);
-            document.querySelectorAll('button').forEach(b => b.addEventListener('click', () => audioManager.play('click')));
-            document.getElementById('start-campaign-btn').addEventListener('click', showCampaignScreen);
-            document.getElementById('start-quickplay-btn').addEventListener('click', startQuickPlay);
-            document.querySelectorAll('.back-to-menu').forEach(b => b.addEventListener('click', () => showScreen('mainMenu')));
-            document.querySelectorAll('.back-btn').forEach(b => b.addEventListener('click', () => gameMode === 'campaign' ? showCampaignScreen() : showScreen('mainMenu')));
-            document.querySelector('.back-to-campaign').addEventListener('click', ()=>{closeModal(victoryModal); showCampaignScreen();});
-            document.getElementById('next-challenge-btn').addEventListener('click', ()=>{closeModal(victoryModal); startChallenge(currentChallengeId+1);});
-            resetBtn.addEventListener('click', () => gameMode === 'campaign' ? startChallenge(currentChallengeId) : startQuickPlay());
-            
-            // MODIFICATION : Plus besoin d'afficher un écran au départ, le HTML s'en charge.
-        }
-
-        // --- SCREEN & MODAL MANAGEMENT ---
-        function showScreen(screenName, isInitial = false) {
-            // ... (votre code showScreen existant, inchangé)
-            if (!isInitial) { screens[currentScreen].classList.add('hidden'); } setTimeout(() => { Object.values(screens).forEach(s => s.style.display = 'none'); const newScreen = screens[screenName]; newScreen.style.display = 'grid'; setTimeout(() => newScreen.classList.remove('hidden'), 50); currentScreen = screenName; currencyDisplay.classList.toggle('hidden', screenName !== 'campaign'); }, isInitial ? 0 : 400);
-        }
-
-        // Le reste de votre code JavaScript (modals, UI, data, game logic, etc.) reste identique
+        const ALL_CHALLENGES = [{id:1,phase:1,title:"Initiation",objective:"Gagnez contre l'IA Facile.",difficulty:'easy',medals:{bronze:{check:w=>w.winner==='X',desc:"Gagner la partie."},silver:{check:(w,p)=>p.X<=4,desc:"Gagner en 4 coups ou moins."},gold:{check:(w,p)=>p.X<=3,desc:"Gagner en 3 coups."}},rewards:{bronze:10,silver:5,gold:10}},{id:2,phase:1,title:"Ligne de Force",objective:"Gagnez avec une ligne verticale.",difficulty:'easy',medals:{bronze:{check:w=>[[0,3,6],[1,4,7],[2,5,8]].some(l=>l.every(i=>w.line.includes(i))),desc:"Gagner avec une colonne."},silver:{check:(w,p,c)=>c.bronze&&p.X<=4,desc:"Et en 4 coups ou moins."},gold:{check:(w,p,c)=>c.silver&&!moveHistory.includes(firstPlayerMoveIndex),desc:"Et sans que votre 1er pion soit retiré."}},rewards:{bronze:15,silver:10,gold:15}},{id:3,phase:1,title:"Maître du Centre",objective:"Gagnez en utilisant la case centrale.",difficulty:'intermediate',medals:{bronze:{check:w=>w.line.includes(4),desc:"Gagner avec la case centrale."},silver:{check:(w,p,c)=>c.bronze&&!fullMoveHistory.some(m=>m.index===4&&m.player==='O'),desc:"Et sans que l'IA ne joue au centre."},gold:{check:(w,p,c)=>c.silver&&levelSelect.value==='intermediate',desc:"Et en difficulté Intermédiaire."}},rewards:{bronze:15,silver:15,gold:20}},{id:4,phase:2,title:"Intouchable",objective:"Gagnez sans que votre 1er pion soit retiré.",difficulty:'intermediate',medals:{bronze:{check:w=>moveHistory.includes(firstPlayerMoveIndex),desc:"Votre 1er pion est toujours sur le plateau."},silver:{check:(w,p,c)=>c.bronze&&p.X<=4,desc:"Et gagner en 4 coups ou moins."},gold:{check:(w,p,c)=>c.silver&&levelSelect.value==='intermediate',desc:"Et en difficulté Intermédiaire."}},rewards:{bronze:20,silver:15,gold:25}},{id:5,phase:2,title:"Efficacité Redoutable",objective:"Gagnez en 3 coups exactement.",difficulty:'intermediate',medals:{bronze:{check:(w,p)=>p.X===3,desc:"Gagner en 3 coups."},silver:{check:(w,p,c)=>c.bronze&&w.line.includes(4),desc:"Et en utilisant la case centrale."},gold:{check:(w,p,c)=>c.silver&&levelSelect.value==='hard',desc:"Et en difficulté Difficile."}},rewards:{bronze:25,silver:25,gold:50}},{id:6,phase:2,title:"Le Puzzle du Coin",objective:"L'IA a mal joué. Gagnez au prochain coup.",difficulty:'easy',preset:{board:['O',null,null,null,'X',null,null,null,'O'],turn:'X'},medals:{bronze:{check:(w,p)=>p.X===1,desc:"Gagner en un seul coup."},silver:{check:(w,p,c)=>c.bronze,desc:" "},gold:{check:(w,p,c)=>c.bronze,desc:" "}},rewards:{bronze:30,silver:0,gold:0}},{id:7,phase:3,title:"Le Grand Test",objective:"Gagnez contre l'IA en Difficile.",difficulty:'hard',medals:{bronze:{check:w=>levelSelect.value==='hard',desc:"Gagner contre l'IA Difficile."},silver:{check:(w,p,c)=>c.bronze&&p.X<=5,desc:"Et en 5 coups ou moins."},gold:{check:(w,p,c)=>c.silver&&moveHistory.includes(firstPlayerMoveIndex),desc:"Et sans que votre 1er pion soit retiré."}},rewards:{bronze:50,silver:50,gold:100}}];
+        function init() { loadData(); createBoardCells(); launchBtn.addEventListener('click', () => { openFullscreen(); audioManager.init(); launchScreen.classList.add('hidden'); showScreen('mainMenu', true); }); exitFullscreenBtn.addEventListener('click', closeFullscreen); document.addEventListener('fullscreenchange', checkFullscreenStatus); document.addEventListener('webkitfullscreenchange', checkFullscreenStatus); boardElement.addEventListener('click', handleBoardClick); document.querySelectorAll('button').forEach(b => b.addEventListener('click', () => audioManager.play('click'))); document.getElementById('start-campaign-btn').addEventListener('click', showCampaignScreen); document.getElementById('start-quickplay-btn').addEventListener('click', startQuickPlay); document.querySelectorAll('.back-to-menu').forEach(b => b.addEventListener('click', () => showScreen('mainMenu'))); document.querySelectorAll('.back-btn').forEach(b => b.addEventListener('click', () => gameMode === 'campaign' ? showCampaignScreen() : showScreen('mainMenu'))); document.querySelector('.back-to-campaign').addEventListener('click', ()=>{closeModal(victoryModal); showCampaignScreen();}); document.getElementById('next-challenge-btn').addEventListener('click', ()=>{closeModal(victoryModal); startChallenge(currentChallengeId+1);}); resetBtn.addEventListener('click', () => gameMode === 'campaign' ? startChallenge(currentChallengeId) : startQuickPlay()); }
+        function showScreen(screenName, isInitial = false) { if (!isInitial) { screens[currentScreen].classList.add('hidden'); } setTimeout(() => { Object.values(screens).forEach(s => s.style.display = 'none'); const newScreen = screens[screenName]; newScreen.style.display = 'grid'; setTimeout(() => newScreen.classList.remove('hidden'), 50); currentScreen = screenName; currencyDisplay.classList.toggle('hidden', screenName !== 'campaign'); }, isInitial ? 0 : 400); }
         function openModal(modal) { modal.style.display = 'flex'; }
         function closeModal(modal) { modal.style.display = 'none'; }
         function showCampaignScreen() { const list = document.getElementById('campaign-list'); list.innerHTML = ''; let lastPhase = 0; ALL_CHALLENGES.forEach(challenge => { if (challenge.phase > lastPhase) { const header = document.createElement('div'); header.className = 'phase-header'; header.textContent = `PHASE ${challenge.phase}`; list.appendChild(header); lastPhase = challenge.phase; } let progress = campaignProgress.find(p => p.id === challenge.id); if (!progress) { progress = { id: challenge.id, unlocked: challenge.id === 1, medal: 0 }; campaignProgress.push(progress); } progress.unlocked = progress.id === 1 || (campaignProgress.find(p => p.id === challenge.id - 1)?.medal > 0); const item = document.createElement('div'); item.className = 'challenge-item'; if (!progress.unlocked) item.classList.add('locked'); item.innerHTML = ` <div class="challenge-header"> <div class="challenge-id">${challenge.id}</div> <div class="challenge-info"> <div>${challenge.title}</div> <small>${challenge.objective}</small> </div> <div class="challenge-medals-display">${getMedalHTML(progress.medal)}</div> </div> <div class="medal-objectives"> <div>🥉 ${challenge.medals.bronze.desc}</div> <div>🥈 ${challenge.medals.silver.desc}</div> <div>🥇 ${challenge.medals.gold.desc}</div> </div> `; if (progress.unlocked) item.addEventListener('click', () => startChallenge(challenge.id)); list.appendChild(item); }); showScreen('campaign'); }
@@ -288,11 +245,49 @@
         function endGame(winnerInfo) { gameActive = false; if (winnerInfo.winner === 'X') { audioManager.play('win'); statusElement.textContent = `Vous avez gagné !`; winnerInfo.line.forEach(i => boardElement.children[i].classList.add('winning-cell')); createVictoryParticles(winnerInfo.line); if (gameMode === 'campaign') { handleCampaignVictory(winnerInfo); } } else { audioManager.play('lose'); statusElement.textContent = `Vous avez perdu !`; if(winnerInfo.line) winnerInfo.line.forEach(i => boardElement.children[i].classList.add('winning-cell')); } }
         function handleCampaignVictory(winnerInfo) { const challenge = ALL_CHALLENGES.find(c => c.id === currentChallengeId); let progress = campaignProgress.find(p => p.id === currentChallengeId); const oldMedalTier = progress.medal; const cond = { bronze: challenge.medals.bronze.check(winnerInfo, playerMoveCount), silver: false, gold: false }; if (cond.bronze) cond.silver = challenge.medals.silver.check(winnerInfo, playerMoveCount, cond); if (cond.silver) cond.gold = challenge.medals.gold.check(winnerInfo, playerMoveCount, cond); let newMedalTier = 0; if(cond.gold) newMedalTier=3; else if(cond.silver) newMedalTier=2; else if(cond.bronze) newMedalTier=1; if (newMedalTier > oldMedalTier) { let reward = 0; if (newMedalTier >= 1 && oldMedalTier < 1) reward += challenge.rewards.bronze; if (newMedalTier >= 2 && oldMedalTier < 2) reward += challenge.rewards.silver; if (newMedalTier >= 3 && oldMedalTier < 3) reward += challenge.rewards.gold; let bonus = 0; if (Math.random() < 0.15) { bonus = Math.floor(reward * 0.5); } progress.medal = newMedalTier; showVictoryModal(challenge, newMedalTier, reward, bonus); } }
         function showVictoryModal(c, tier, reward, bonus) { document.getElementById('victory-title').textContent = c.title + " - Réussi !"; document.getElementById('victory-medals').innerHTML = getMedalHTML(tier); document.getElementById('victory-reward').textContent = reward; const bonusText = document.getElementById('victory-bonus-text'); if (bonus > 0) { document.getElementById('victory-bonus').textContent = bonus; bonusText.classList.remove('hidden'); } else { bonusText.classList.add('hidden'); } const nextChallenge = ALL_CHALLENGES.find(ch => ch.id === c.id + 1); let isNextUnlocked = false; if (nextChallenge) { const nextProgress = campaignProgress.find(p=>p.id === nextChallenge.id); isNextUnlocked = !nextProgress || nextProgress.unlocked; } document.getElementById('next-challenge-btn').classList.toggle('hidden', !nextChallenge || !isNextUnlocked); setTimeout(() => { openModal(victoryModal); animateCurrencyGain(reward + bonus, document.getElementById('victory-reward')); }, 1200); }
-        function createVictoryParticles(line) { const container = document.getElementById('board-container'); for(let i = 0; i < 30; i++) { const p = document.createElement('div'); p.className = 'particle'; const centerIndex = line[1]; const cell = boardElement.children[centerIndex]; const cellRect = cell.getBoundingClientRect(); const containerRect = container.getBoundingClientRect(); const startX = cellRect.left + cellRect.width / 2 - containerRect.left; const startY = cellRect.top + cellRect.height / 2 - containerRect.top; const angle = Math.random() * 2 * Math.PI; const radius = 50 + Math.random() * 100; const endX = startX + Math.cos(angle) * radius; const endY = startY + Math.sin(angle) * radius; const size = Math.random() * 5 + 2; p.style.left = `${startX}px`; p.style.top = `${startY}px`; p.style.width = `${size}px`; p.style.height = `${size}px`; p.style.setProperty('--transform-end', `translate(${endX - startX}px, ${endY - startY}px)`); container.appendChild(p); setTimeout(() => p.remove(), 1000); } }
-        function animateCurrencyGain(amount, originElement) { if (amount <= 0) return; const originRect = originElement.getBoundingClientRect(); const targetRect = currencyDisplay.getBoundingClientRect(); for (let i = 0; i < Math.min(amount / 5, 20); i++) { setTimeout(() => { const flyer = document.createElement('div'); flyer.className = 'currency-flyer'; flyer.textContent = '✨'; flyer.style.left = `${originRect.left + (Math.random() * originRect.width)}px`; flyer.style.top = `${originRect.top + (Math.random() * originRect.height)}px`; document.body.appendChild(flyer); audioManager.play('coin'); setTimeout(() => { flyer.style.transform = `translate(${targetRect.left - parseFloat(flyer.style.left)}px, ${targetRect.top - parseFloat(flyer.style.top)}px) scale(0.5)`; flyer.style.opacity = '0'; }, 50); setTimeout(() => flyer.remove(), 1050); }, i * 50); } setTimeout(() => { currency += amount; saveData(); updateCurrencyDisplay(true); }, 1100); }
+        
+        function createVictoryParticles(line) {
+            const container = document.getElementById('board-container');
+            // --- AMÉLIORATION iPHONE : Réduction du nombre de particules pour la fluidité ---
+            for(let i = 0; i < 20; i++) { 
+                const p = document.createElement('div'); p.className = 'particle'; 
+                const centerIndex = line[1]; const cell = boardElement.children[centerIndex];
+                const cellRect = cell.getBoundingClientRect(); const containerRect = container.getBoundingClientRect();
+                const startX = cellRect.left + cellRect.width / 2 - containerRect.left;
+                const startY = cellRect.top + cellRect.height / 2 - containerRect.top;
+                const angle = Math.random() * 2 * Math.PI; const radius = 50 + Math.random() * 100;
+                const endX = startX + Math.cos(angle) * radius; const endY = startY + Math.sin(angle) * radius;
+                const size = Math.random() * 5 + 2;
+                p.style.left = `${startX}px`; p.style.top = `${startY}px`; p.style.width = `${size}px`; p.style.height = `${size}px`;
+                p.style.setProperty('--transform-end', `translate(${endX - startX}px, ${endY - startY}px)`);
+                container.appendChild(p);
+                setTimeout(() => p.remove(), 1000);
+            }
+        }
+        function animateCurrencyGain(amount, originElement) {
+            if (amount <= 0) return;
+            const originRect = originElement.getBoundingClientRect();
+            const targetRect = currencyDisplay.getBoundingClientRect();
+            // --- AMÉLIORATION iPHONE : Réduction du nombre d'icônes pour la fluidité ---
+            for (let i = 0; i < Math.min(amount / 5, 15); i++) {
+                setTimeout(() => {
+                    const flyer = document.createElement('div'); flyer.className = 'currency-flyer'; flyer.textContent = '✨';
+                    flyer.style.left = `${originRect.left + (Math.random() * originRect.width)}px`;
+                    flyer.style.top = `${originRect.top + (Math.random() * originRect.height)}px`;
+                    document.body.appendChild(flyer); audioManager.play('coin');
+                    setTimeout(() => {
+                        flyer.style.transform = `translate(${targetRect.left - parseFloat(flyer.style.left)}px, ${targetRect.top - parseFloat(flyer.style.top)}px) scale(0.5)`;
+                        flyer.style.opacity = '0';
+                    }, 50);
+                    setTimeout(() => flyer.remove(), 1050);
+                }, i * 50);
+            }
+            setTimeout(() => { currency += amount; saveData(); updateCurrencyDisplay(true); }, 1100);
+        }
+        
+        // ... (Le reste de votre JavaScript est identique et performant)
         const winningConditions = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]; function createBoardCells(){if(boardElement.children.length>0)return;for(let i=0;i<9;i++){const c=document.createElement('div');c.classList.add('cell');c.dataset.index=i;boardElement.appendChild(c);}} function handleBoardClick(e){const c=e.target.closest('.cell');if(!c||!gameActive||currentPlayer!=='X'||board[parseInt(c.dataset.index)])return;runPlayerTurn(parseInt(c.dataset.index));} function runPlayerTurn(i){placePiece(i,'X');const w=checkWinner();if(w){endGame(w);return;}removeOldestPieceIfNeeded();switchPlayer();if (gameActive) setTimeout(computerMove,500);} function computerMove(){if(!gameActive)return;let m;const d=levelSelect.value;if(d==='easy')m=getEasyMove();else if(d==='intermediate')m=getIntermediateMove();else m=getHardMove();if(m!==-1){placePiece(m,'O');const w=checkWinner();if(w){endGame(w);return;}removeOldestPieceIfNeeded();}else{gameActive=false;statusElement.textContent='Égalité !';}switchPlayer();} function placePiece(i,p){board[i]=p;moveHistory.push(i);fullMoveHistory.push({index:i,player:p});if(p==='X'){playerMoveCount.X++;if(firstPlayerMoveIndex===-1)firstPlayerMoveIndex=i;}else playerMoveCount.O++;audioManager.play('place');const c=boardElement.children[i];c.innerHTML='';const pion=document.createElement('span');pion.className='pion placed';pion.textContent=p;c.appendChild(pion);c.classList.add(p.toLowerCase());setTimeout(()=>pion.classList.remove('placed'),300);updateGhostPiece();} function removeOldestPieceIfNeeded(){if(moveHistory.length>6){const o=moveHistory.shift();board[o]=null;const c=boardElement.children[o];const p=c.querySelector('.pion');if(p){p.classList.add('removed');setTimeout(()=>{c.innerHTML='';c.className='cell';},300);}}updateGhostPiece();} function checkWinner(){for(const l of winningConditions){const[a,b,c]=l;if(board[a]&&board[a]===board[b]&&board[a]===board[c])return{winner:board[a],line:l};}if(!board.includes(null) && moveHistory.length < 6) return {winner:'tie',line:null}; return null;} function startNewRound(preset = null){board=Array(9).fill(null);moveHistory=[];fullMoveHistory=[];playerMoveCount={X:0,O:0};firstPlayerMoveIndex=-1;currentPlayer='X';gameActive=true;Array.from(boardElement.children).forEach(c=>{c.innerHTML='';c.className='cell';});if(preset){preset.board.forEach((p,i)=>{if(p)placePiece(i,p);});currentPlayer=preset.turn;}updateStatus();updateGhostPiece(true);} function updateGhostPiece(c=false){document.querySelectorAll('.cell.ghost').forEach(e=>e.classList.remove('ghost'));if(!c&&moveHistory.length>=6){const o=moveHistory[0];if(boardElement.children[o])boardElement.children[o].classList.add('ghost');}} function switchPlayer(){if(!gameActive)return;currentPlayer=(currentPlayer==='X'?'O':'X');updateStatus();} function updateStatus(){statusElement.textContent=gameActive?`Au tour de ${currentPlayer}`:'';statusElement.style.color=currentPlayer==='X'?'var(--x-color)':'var(--o-color)';} function getEasyMove(){let a=board.map((c,i)=>c===null?i:null).filter(v=>v!==null);return a.length?a[Math.floor(Math.random()*a.length)]:-1;} function getIntermediateMove(){for(let p of['O','X']){for(let i=0;i<9;i++){if(!board[i]){board[i]=p;if(checkWinner()){board[i]=null;return i;}board[i]=null;}}}return getEasyMove();} function getHardMove(){return minimax(board,'O').index;} function minimax(b,p){let a=b.map((c,i)=>c===null?i:null).filter(v=>v!==null);let w=checkWinnerForBoard(b);if(w)return{score:w.winner==='O'?10:-10};if(a.length===0)return{score:0};let m=[];for(let i of a){let o={index:i};b[i]=p;o.score=minimax(b,p==='O'?'X':'O').score;b[i]=null;m.push(o);}let bm;if(p==='O'){let bs=-Infinity;for(let o of m){if(o.score>bs){bs=o.score;bm=o;}}}else{let bs=Infinity;for(let o of m){if(o.score<bs){bs=o.score;bm=o;}}}return bm;} function checkWinnerForBoard(b){for(const l of winningConditions){const[x,y,z]=l;if(b[x]&&b[x]===b[y]&&b[x]===b[z])return{winner:b[x]};}return null;}
 
-        // --- Let's Go! ---
         init();
     });
     </script>
